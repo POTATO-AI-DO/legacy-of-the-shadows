@@ -5,237 +5,295 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Pokémon: Legacy of the Shadows</title>
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
     body {
       font-family: 'Arial', sans-serif;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
+      background: #0a0a0a;
+      color: #fff;
       overflow: hidden;
     }
+
     #gameContainer {
-      width: 1280px;
-      height: 720px;
+      width: 100vw;
+      height: 100vh;
       position: relative;
-      background: #1a1a2e;
-      border-radius: 20px;
-      box-shadow: 0 0 40px rgba(0, 0, 0, 0.8);
-      overflow: hidden;
     }
-    #canvas {
+
+    canvas {
+      display: block;
       width: 100%;
       height: 100%;
-      display: block;
     }
+
     #ui {
       position: absolute;
+      top: 0;
+      left: 0;
       width: 100%;
       height: 100%;
       pointer-events: none;
+      z-index: 10;
     }
+
     .hud {
       position: absolute;
-      color: white;
+      color: #fff;
       font-weight: bold;
       text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+      pointer-events: none;
     }
-    #playerInfo { top: 20px; left: 20px; font-size: 18px; }
-    #teamHud { top: 20px; right: 20px; display: flex; gap: 10px; }
+
+    #playerInfo {
+      top: 20px;
+      left: 20px;
+      font-size: 18px;
+      background: rgba(0, 0, 0, 0.7);
+      padding: 15px 20px;
+      border-radius: 10px;
+      border: 2px solid #667eea;
+    }
+
+    #teamHud {
+      top: 20px;
+      right: 20px;
+      display: flex;
+      gap: 15px;
+    }
+
     .teamMember {
-      width: 80px;
-      height: 60px;
-      background: rgba(0, 0, 0, 0.6);
+      width: 90px;
+      height: 70px;
+      background: rgba(0, 0, 0, 0.8);
       border: 3px solid #00ff00;
-      border-radius: 8px;
-      padding: 5px;
+      border-radius: 10px;
+      padding: 10px;
       text-align: center;
-      font-size: 12px;
+      font-size: 11px;
       color: #00ff00;
     }
-    #moveHud { bottom: 20px; left: 50%; transform: translateX(-50%); display: flex; gap: 20px; pointer-events: auto; }
+
+    #moveHud {
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 20px;
+      pointer-events: auto;
+    }
+
     .moveBtn {
-      width: 120px;
-      height: 100px;
-      background: rgba(0, 0, 0, 0.8);
+      width: 130px;
+      height: 110px;
+      background: linear-gradient(135deg, #667eea, #764ba2);
       border: 3px solid #ffaa00;
       border-radius: 12px;
       color: white;
       font-weight: bold;
       font-size: 14px;
       cursor: pointer;
-      position: relative;
-      transition: transform 0.1s;
+      transition: all 0.2s;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
     }
-    .moveBtn:hover { transform: scale(1.05); }
-    .moveBtn:active { transform: scale(0.95); }
-    .cooldown {
-      position: absolute;
-      width: 100%;
-      height: 100%;
+
+    .moveBtn:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 25px rgba(102, 126, 234, 0.5);
+    }
+
+    .moveBtn.cooldown {
+      opacity: 0.5;
+    }
+
+    #itemWheel {
+      bottom: 30px;
+      left: 30px;
+      font-size: 16px;
       background: rgba(0, 0, 0, 0.7);
-      border-radius: 12px;
+      padding: 15px 20px;
+      border-radius: 10px;
+      border: 2px solid #ffaa00;
+    }
+
+    .menu-overlay {
+      display: none;
+      position: fixed;
       top: 0;
       left: 0;
-      display: flex;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.95);
+      z-index: 100;
+      pointer-events: auto;
       align-items: center;
       justify-content: center;
-      color: #ffaa00;
-      font-size: 16px;
-      font-weight: bold;
+      flex-direction: column;
     }
-    #itemWheel { bottom: 20px; left: 20px; font-size: 16px; color: white; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8); }
-    #menu {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      background: rgba(0, 0, 0, 0.95);
+
+    .menu-overlay.active {
+      display: flex;
+    }
+
+    .menu-content {
+      background: linear-gradient(135deg, #1a1a2e, #16213e);
       border: 4px solid #ffaa00;
       border-radius: 20px;
       padding: 40px;
-      text-align: center;
-      color: white;
-      z-index: 100;
-      display: none;
-      pointer-events: auto;
-      max-width: 500px;
+      max-width: 600px;
+      max-height: 80vh;
+      overflow-y: auto;
+      box-shadow: 0 0 50px rgba(255, 170, 0, 0.3);
     }
-    #menu h2 {
-      font-size: 32px;
-      margin-bottom: 20px;
+
+    h1, h2 {
       color: #ffaa00;
+      margin-bottom: 20px;
+      text-align: center;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
     }
-    .menuBtn {
+
+    h1 {
+      font-size: 40px;
+    }
+
+    h2 {
+      font-size: 28px;
+    }
+
+    .btn {
       width: 100%;
       padding: 15px;
       margin: 10px 0;
-      background: #667eea;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
       border: 2px solid #ffaa00;
       border-radius: 10px;
-      color: white;
       font-weight: bold;
       font-size: 16px;
       cursor: pointer;
-      transition: all 0.2s;
+      transition: all 0.3s;
     }
-    .menuBtn:hover {
-      background: #764ba2;
-      transform: scale(1.05);
+
+    .btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 25px rgba(102, 126, 234, 0.5);
     }
-    #starterSelect {
-      display: none;
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      background: rgba(0, 0, 0, 0.95);
-      border: 4px solid #ffaa00;
-      border-radius: 20px;
-      padding: 40px;
-      text-align: center;
-      color: white;
-      z-index: 100;
-      pointer-events: auto;
-    }
-    #starterSelect h2 {
-      font-size: 32px;
-      margin-bottom: 30px;
-      color: #ffaa00;
-    }
-    .starterGrid {
+
+    .starter-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
       gap: 20px;
-      max-width: 400px;
+      margin: 20px 0;
     }
-    .starterOption {
-      padding: 20px;
-      background: #667eea;
-      border: 3px solid #ffaa00;
+
+    .starter-option {
+      padding: 25px;
+      background: rgba(102, 126, 234, 0.3);
+      border: 3px solid #667eea;
       border-radius: 15px;
       color: white;
       font-weight: bold;
       font-size: 18px;
       cursor: pointer;
-      transition: all 0.2s;
+      transition: all 0.3s;
+      text-align: center;
     }
-    .starterOption:hover {
-      background: #764ba2;
-      transform: scale(1.1);
-      box-shadow: 0 0 20px rgba(255, 170, 0, 0.8);
+
+    .starter-option:hover {
+      background: rgba(102, 126, 234, 0.6);
+      transform: scale(1.05);
+      box-shadow: 0 0 20px rgba(102, 126, 234, 0.8);
     }
-    #mapOverlay {
+
+    #cutsceneOverlay {
       display: none;
-      position: absolute;
+      position: fixed;
+      top: 0;
+      left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(0, 0, 0, 0.9);
-      z-index: 50;
+      background: #000;
+      z-index: 200;
       pointer-events: auto;
-    }
-    #mapContainer {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: 600px;
-      background: rgba(20, 20, 40, 0.8);
-      border: 4px solid #ffaa00;
-      border-radius: 20px;
-      display: flex;
-      flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: 20px;
-      padding: 40px;
-      max-height: 80vh;
-      overflow-y: auto;
     }
-    .landBtn {
-      padding: 12px 20px;
-      background: #667eea;
-      border: 2px solid #ffaa00;
-      border-radius: 8px;
+
+    #cutsceneOverlay.active {
+      display: flex;
+    }
+
+    .cutscene-content {
+      text-align: center;
       color: white;
-      font-weight: bold;
-      cursor: pointer;
-      transition: all 0.2s;
-      width: 100%;
+      max-width: 800px;
+      padding: 40px;
     }
-    .landBtn:hover {
-      background: #764ba2;
-      transform: scale(1.05);
+
+    .cutscene-text {
+      font-size: 28px;
+      margin-bottom: 30px;
+      text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.8);
+      line-height: 1.6;
     }
-    .landBtn.completed {
-      background: #00aa00;
-      border-color: #00ff00;
+
+    .gastly-chant {
+      color: #8b008b;
+      font-style: italic;
+      animation: pulse 1s infinite;
     }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 0.6; }
+      50% { opacity: 1; }
+    }
+
+    .skip-text {
+      position: absolute;
+      bottom: 20px;
+      right: 20px;
+      color: #999;
+      font-size: 14px;
+      animation: blink 1s infinite;
+    }
+
+    @keyframes blink {
+      0%, 50%, 100% { opacity: 1; }
+      25%, 75% { opacity: 0.5; }
+    }
+
     #pokedexOverlay {
       display: none;
-      position: absolute;
+      position: fixed;
+      top: 0;
+      left: 0;
       width: 100%;
       height: 100%;
       background: rgba(0, 0, 0, 0.95);
-      z-index: 60;
+      z-index: 100;
       pointer-events: auto;
       overflow-y: auto;
-      padding: 40px;
     }
+
     #pokedexGrid {
       display: grid;
-      grid-template-columns: repeat(10, 1fr);
+      grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
       gap: 10px;
-      max-width: 1000px;
+      padding: 40px;
+      max-width: 1200px;
       margin: 0 auto;
     }
-    .pokedexSlot {
+
+    .pokedex-slot {
       width: 80px;
       height: 80px;
       background: rgba(100, 100, 150, 0.6);
       border: 2px solid #ffaa00;
-      border-radius: 8px;
+      border-radius: 10px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -243,104 +301,123 @@
       font-weight: bold;
       font-size: 12px;
       cursor: pointer;
-      transition: all 0.2s;
-      text-align: center;
-      padding: 5px;
+      transition: all 0.3s;
     }
-    .pokedexSlot:hover { transform: scale(1.1); background: rgba(150, 100, 200, 0.8); }
-    .pokedexSlot.caught {
+
+    .pokedex-slot:hover {
+      transform: scale(1.1);
+    }
+
+    .pokedex-slot.caught {
+      background: rgba(0, 150, 100, 0.8);
       border-color: #00ff00;
-      background: rgba(0, 100, 50, 0.6);
     }
-    .pokedexSlot.shiny {
+
+    .pokedex-slot.shiny {
       border-color: #ffff00;
-      background: rgba(150, 150, 0, 0.6);
+      background: rgba(150, 150, 0, 0.8);
     }
-    #purificationOverlay {
+
+    #mapOverlay {
       display: none;
-      position: absolute;
+      position: fixed;
+      top: 0;
+      left: 0;
       width: 100%;
       height: 100%;
       background: rgba(0, 0, 0, 0.95);
-      z-index: 70;
+      z-index: 100;
       pointer-events: auto;
-      flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: 30px;
     }
-    #purificationPrompt {
-      font-size: 32px;
-      color: #ffaa00;
-      font-weight: bold;
-      text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.8);
+
+    #mapContainer {
+      background: linear-gradient(135deg, #1a1a2e, #16213e);
+      border: 4px solid #ffaa00;
+      border-radius: 20px;
+      padding: 40px;
+      max-width: 700px;
+      max-height: 80vh;
+      overflow-y: auto;
+      box-shadow: 0 0 50px rgba(255, 170, 0, 0.3);
     }
-    #purificationBar {
-      width: 400px;
-      height: 40px;
-      background: rgba(0, 0, 0, 0.8);
-      border: 3px solid #ffaa00;
-      border-radius: 10px;
-      overflow: hidden;
-    }
-    #purificationProgress {
-      height: 100%;
-      background: linear-gradient(90deg, #00ff00, #ffaa00);
-      width: 0%;
-      transition: width 0.1s;
-    }
-    #purificationBtn {
-      padding: 15px 40px;
-      background: #00ff00;
-      border: 3px solid #ffaa00;
+
+    .land-btn {
+      width: 100%;
+      padding: 15px;
+      margin: 10px 0;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      border: 2px solid #ffaa00;
       border-radius: 10px;
       font-weight: bold;
-      font-size: 20px;
       cursor: pointer;
-      transition: all 0.1s;
-      color: #000;
+      transition: all 0.3s;
     }
-    #purificationBtn:active { transform: scale(0.95); }
+
+    .land-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 25px rgba(102, 126, 234, 0.5);
+    }
+
+    .land-btn.completed {
+      background: linear-gradient(135deg, #00aa00, #00ff00);
+      border-color: #00ff00;
+    }
+
+    #pauseOverlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.95);
+      z-index: 100;
+      pointer-events: auto;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #pauseMenu {
+      background: linear-gradient(135deg, #1a1a2e, #16213e);
+      border: 4px solid #ffaa00;
+      border-radius: 20px;
+      padding: 40px;
+      text-align: center;
+    }
+
     .notification {
       position: absolute;
-      top: 100px;
-      right: 20px;
+      top: 120px;
+      right: 30px;
       background: rgba(0, 0, 0, 0.9);
       color: #00ff00;
-      padding: 15px 20px;
+      padding: 15px 25px;
       border: 2px solid #00ff00;
       border-radius: 10px;
       font-weight: bold;
       animation: slideIn 0.3s ease-out;
-      z-index: 80;
+      z-index: 90;
       pointer-events: none;
     }
+
     .notification.shiny {
       color: #ffff00;
       border-color: #ffff00;
       animation: pulse 0.5s infinite;
     }
+
     @keyframes slideIn {
-      from { transform: translateX(400px); opacity: 0; }
-      to { transform: translateX(0); opacity: 1; }
-    }
-    @keyframes pulse {
-      0%, 100% { transform: scale(1); }
-      50% { transform: scale(1.1); }
-    }
-    #debugInfo {
-      position: absolute;
-      bottom: 20px;
-      right: 20px;
-      background: rgba(0, 0, 0, 0.8);
-      color: #00ff00;
-      padding: 10px 15px;
-      border: 2px solid #00ff00;
-      border-radius: 5px;
-      font-size: 12px;
-      font-family: monospace;
-      max-width: 300px;
-      z-index: 40;
+      from {
+        transform: translateX(400px);
+        opacity: 0;
+      }
+      to {
+        transform: translateX(0);
+        opacity: 1;
+      }
     }
   </style>
 </head>
@@ -348,71 +425,78 @@
   <div id="gameContainer">
     <canvas id="canvas"></canvas>
     <div id="ui">
-      <div id="playerInfo" class="hud">Player Level: <span id="playerLevel">1</span> | HP: <span id="playerHP">100</span>/100</div>
+      <div id="playerInfo" class="hud">
+        <div>Level: <span id="playerLevel">1</span></div>
+        <div>HP: <span id="playerHP">100</span>/100</div>
+      </div>
       <div id="teamHud" class="hud">
         <div class="teamMember">
-          <div id="team0Name">–</div>
-          <div id="team0HP" style="font-size: 10px;">–</div>
+          <div id="team0Name">—</div>
+          <div id="team0HP">—</div>
         </div>
         <div class="teamMember">
-          <div id="team1Name">–</div>
-          <div id="team1HP" style="font-size: 10px;">–</div>
+          <div id="team1Name">—</div>
+          <div id="team1HP">—</div>
         </div>
         <div class="teamMember">
-          <div id="team2Name">–</div>
-          <div id="team2HP" style="font-size: 10px;">–</div>
+          <div id="team2Name">—</div>
+          <div id="team2HP">—</div>
         </div>
       </div>
       <div id="moveHud">
-        <button class="moveBtn" id="moveBtn1">Move 1<div class="cooldown" id="cooldown1" style="display: none;"></div></button>
-        <button class="moveBtn" id="moveBtn2">Move 2<div class="cooldown" id="cooldown2" style="display: none;"></div></button>
+        <button class="moveBtn" id="moveBtn1" onclick="performAttack(1)">ATTACK<br><span style="font-size: 10px;">Space</span></button>
+        <button class="moveBtn" id="moveBtn2" onclick="performAttack(2)">SPECIAL<br><span style="font-size: 10px;">E</span></button>
       </div>
       <div id="itemWheel">Items: <span id="itemCount">5</span></div>
-      <div id="debugInfo" style="display: none;">FPS: <span id="fps">60</span> | Enemies: <span id="enemyCount">0</span></div>
     </div>
-    <div id="starterSelect">
-      <h2>Choose Your Starter!</h2>
-      <div class="starterGrid">
-        <div class="starterOption" onclick="selectStarter('charmander')">🔥 Charmander</div>
-        <div class="starterOption" onclick="selectStarter('squirtle')">💧 Squirtle</div>
-        <div class="starterOption" onclick="selectStarter('bulbasaur')">🌿 Bulbasaur</div>
-        <div class="starterOption" onclick="selectStarter('pikachu')">⚡ Pikachu</div>
+
+    <div id="starterOverlay" class="menu-overlay active">
+      <div class="menu-content">
+        <h1>⚡ Pokémon: Legacy of the Shadows</h1>
+        <p style="text-align: center; margin-bottom: 30px; color: #aaa;">Choose your starter Pokémon</p>
+        <div class="starter-grid">
+          <div class="starter-option" onclick="selectStarter('charmander')">🔥 Charmander</div>
+          <div class="starter-option" onclick="selectStarter('squirtle')">💧 Squirtle</div>
+          <div class="starter-option" onclick="selectStarter('bulbasaur')">🌿 Bulbasaur</div>
+          <div class="starter-option" onclick="selectStarter('pikachu')">⚡ Pikachu</div>
+        </div>
       </div>
     </div>
-    <div id="menu">
-      <h2>PAUSED</h2>
-      <button class="menuBtn" onclick="togglePause()">Resume</button>
-      <button class="menuBtn" onclick="togglePokedex()">Pokédex</button>
-      <button class="menuBtn" onclick="toggleMap()">Map</button>
-      <button class="menuBtn" onclick="saveGame()">Save</button>
-      <button class="menuBtn" onclick="mainMenu()">Main Menu</button>
+
+    <div id="cutsceneOverlay">
+      <div class="cutscene-content" id="cutsceneContent"></div>
+      <div class="skip-text">Click to continue...</div>
     </div>
+
+    <div id="pokedexOverlay">
+      <h2 style="text-align: center; margin-bottom: 20px;">Pokédex - Caught: <span id="caughtCount">0</span>/151</h2>
+      <div id="pokedexGrid"></div>
+      <button class="btn" onclick="togglePokedex()" style="width: 200px; margin: 20px auto; display: block;">Close Pokédex</button>
+    </div>
+
     <div id="mapOverlay">
       <div id="mapContainer">
-        <h2 style="color: #ffaa00; font-size: 28px; margin-bottom: 20px;">EXPEDITION MAP</h2>
+        <h2>Expedition Map</h2>
+        <p style="text-align: center; margin-bottom: 20px; color: #aaa;">Select a land to explore</p>
         <div id="landsList"></div>
-        <button class="menuBtn" onclick="toggleMap()" style="width: 200px; margin-top: 20px;">Close Map</button>
+        <button class="btn" onclick="toggleMap()">Close Map</button>
       </div>
     </div>
-    <div id="pokedexOverlay">
-      <div style="text-align: center; margin-bottom: 30px;">
-        <h2 style="color: #ffaa00; font-size: 28px;">POKÉDEX</h2>
-        <p style="color: white; font-size: 16px;">Caught: <span id="caughtCount">0</span>/151</p>
+
+    <div id="pauseOverlay">
+      <div id="pauseMenu">
+        <h2>PAUSED</h2>
+        <button class="btn" onclick="togglePause()">Resume</button>
+        <button class="btn" onclick="toggleMap()">Map</button>
+        <button class="btn" onclick="togglePokedex()">Pokédex</button>
+        <button class="btn" onclick="saveGame()">Save Game</button>
+        <button class="btn" onclick="mainMenu()">Main Menu</button>
       </div>
-      <div id="pokedexGrid"></div>
-      <button class="menuBtn" onclick="togglePokedex()" style="width: 200px; margin-top: 30px; margin-left: 50%; transform: translateX(-50%);">Close Pokédex</button>
-    </div>
-    <div id="purificationOverlay">
-      <div id="purificationPrompt">PURIFY THE SHADOW!</div>
-      <div id="purificationBar"><div id="purificationProgress"></div></div>
-      <button id="purificationBtn" onmousedown="purifyTap()" onmouseup="purifyRelease()">MASH SPACE!</button>
-      <p style="color: white; font-size: 18px;">Taps: <span id="purificationTaps">0</span>/20</p>
     </div>
   </div>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script>
-    // ===== GAME STATE =====
     const gameState = {
       starter: null,
       playerLevel: 1,
@@ -421,25 +505,41 @@
       team: [],
       pokedex: new Array(151).fill(false),
       shinies: new Array(151).fill(false),
-      currentLand: 'intro',
+      currentLand: null,
       completedLands: [],
       isPaused: false,
       gameStarted: false,
-      purifying: false
+      cutsceneActive: false
     };
 
-    const pokedexData = {
-      1: { name: 'Bulbasaur', type: 'Grass/Poison' },
-      4: { name: 'Charmander', type: 'Fire' },
-      7: { name: 'Squirtle', type: 'Water' },
-      25: { name: 'Pikachu', type: 'Electric' },
-      145: { name: 'Zapdos', type: 'Electric/Flying' },
-      146: { name: 'Moltres', type: 'Fire/Flying' },
-      144: { name: 'Articuno', type: 'Ice/Flying' },
-      249: { name: 'Lugia', type: 'Psychic/Flying' },
-    };
+    function loadGame() {
+      const saved = localStorage.getItem('pokemonLegacy');
+      if (saved) {
+        const data = JSON.parse(saved);
+        gameState.starter = data.starter;
+        gameState.playerLevel = data.playerLevel;
+        gameState.playerHP = data.playerHP;
+        gameState.team = data.team;
+        gameState.pokedex = data.pokedex;
+        gameState.shinies = data.shinies;
+        gameState.completedLands = data.completedLands;
+      }
+    }
 
-    // ===== THREE.JS SCENE =====
+    function saveGame() {
+      const save = {
+        starter: gameState.starter,
+        playerLevel: gameState.playerLevel,
+        playerHP: gameState.playerHP,
+        team: gameState.team,
+        pokedex: gameState.pokedex,
+        shinies: gameState.shinies,
+        completedLands: gameState.completedLands
+      };
+      localStorage.setItem('pokemonLegacy', JSON.stringify(save));
+      addNotification('✓ Game Saved!');
+    }
+
     const canvas = document.getElementById('canvas');
     const scene = new THREE.Scene();
     scene.background = new THREE.Color(0x87ceeb);
@@ -447,15 +547,11 @@
 
     const camera = new THREE.PerspectiveCamera(60, canvas.clientWidth / canvas.clientHeight, 0.1, 1000);
     camera.position.set(0, 12, 15);
-    camera.lookAt(0, 2, 0);
 
     const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
     renderer.setSize(canvas.clientWidth, canvas.clientHeight);
     renderer.shadowMap.enabled = true;
-    renderer.shadowMap.type = THREE.PCFShadowShadowMap;
-    renderer.outputEncoding = THREE.sRGBEncoding;
 
-    // Lighting
     const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
     scene.add(ambientLight);
     const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
@@ -463,50 +559,32 @@
     directionalLight.castShadow = true;
     directionalLight.shadow.mapSize.width = 2048;
     directionalLight.shadow.mapSize.height = 2048;
-    directionalLight.shadow.camera.far = 100;
-    directionalLight.shadow.camera.left = -50;
-    directionalLight.shadow.camera.right = 50;
-    directionalLight.shadow.camera.top = 50;
-    directionalLight.shadow.camera.bottom = -50;
     scene.add(directionalLight);
 
-    // Ground
     const groundGeom = new THREE.PlaneGeometry(200, 200);
-    const groundMat = new THREE.MeshStandardMaterial({ color: 0x90ee90, roughness: 0.8 });
+    const groundMat = new THREE.MeshStandardMaterial({ color: 0x90ee90 });
     const ground = new THREE.Mesh(groundGeom, groundMat);
     ground.rotation.x = -Math.PI / 2;
     ground.receiveShadow = true;
     scene.add(ground);
 
-    // ===== SIMPLE TOY-STYLE POKEMON FACTORY =====
     function createToyPokemon(name) {
       const group = new THREE.Group();
+      const color = getTypeColor(name);
 
-      // Body (chunky, exaggerated)
       const bodyGeom = new THREE.BoxGeometry(1, 1.2, 0.8);
-      const bodyMat = new THREE.MeshStandardMaterial({
-        color: getTypeColor(name),
-        roughness: 0.3,
-        metalness: 0.1
-      });
+      const bodyMat = new THREE.MeshStandardMaterial({ color, roughness: 0.3 });
       const body = new THREE.Mesh(bodyGeom, bodyMat);
       body.position.y = 0.6;
       body.castShadow = true;
-      body.receiveShadow = true;
       group.add(body);
 
-      // Head
       const headGeom = new THREE.SphereGeometry(0.5, 8, 8);
-      const headMat = new THREE.MeshStandardMaterial({
-        color: getTypeColor(name),
-        roughness: 0.3
-      });
-      const head = new THREE.Mesh(headGeom, headMat);
+      const head = new THREE.Mesh(headGeom, bodyMat);
       head.position.y = 1.5;
       head.castShadow = true;
       group.add(head);
 
-      // Eyes (simple)
       const eyeGeom = new THREE.SphereGeometry(0.15, 8, 8);
       const eyeMat = new THREE.MeshStandardMaterial({ color: 0x000000 });
       const eye1 = new THREE.Mesh(eyeGeom, eyeMat);
@@ -515,9 +593,8 @@
       eye2.position.set(0.15, 1.7, 0.4);
       group.add(eye1, eye2);
 
-      // Legs
       const legGeom = new THREE.BoxGeometry(0.3, 0.6, 0.3);
-      const legMat = new THREE.MeshStandardMaterial({ color: 0x333333, roughness: 0.5 });
+      const legMat = new THREE.MeshStandardMaterial({ color: 0x333333 });
       for (let i = 0; i < 4; i++) {
         const leg = new THREE.Mesh(legGeom, legMat);
         leg.position.set((i < 2 ? -0.3 : 0.3), 0.3, (i % 2 === 0 ? -0.2 : 0.2));
@@ -525,15 +602,13 @@
         group.add(leg);
       }
 
-      // Shadow aura for Shadow Pokémon
       if (name.includes('shadow')) {
         const auraGeom = new THREE.SphereGeometry(1.3, 16, 16);
         const auraMat = new THREE.MeshStandardMaterial({
           color: 0x8b008b,
           transparent: true,
           opacity: 0.3,
-          emissive: 0x8b008b,
-          emissiveIntensity: 0.5
+          emissive: 0x8b008b
         });
         const aura = new THREE.Mesh(auraGeom, auraMat);
         aura.position.y = 0.6;
@@ -544,24 +619,22 @@
     }
 
     function getTypeColor(name) {
-      const typeColors = {
-        'charmander': 0xff6347, 'fire': 0xff6347,
-        'squirtle': 0x4169e1, 'water': 0x4169e1,
-        'bulbasaur': 0x32cd32, 'grass': 0x32cd32,
-        'pikachu': 0xffd700, 'electric': 0xffd700,
-        'zapdos': 0xffd700, 'moltres': 0xff6347, 'articuno': 0x87ceeb,
-        'lugia': 0x696969, 'mewtwo': 0x9932cc
+      const colors = {
+        'charmander': 0xff6347, 'charizard': 0xff6347,
+        'squirtle': 0x4169e1, 'blastoise': 0x4169e1,
+        'bulbasaur': 0x32cd32, 'venusaur': 0x32cd32,
+        'pikachu': 0xffd700, 'raichu': 0xffd700,
+        'articuno': 0x87ceeb, 'zapdos': 0xffd700, 'moltres': 0xff6347,
+        'lugia': 0x696969, 'mewtwo': 0x9932cc, 'celebi': 0x32cd32
       };
-      for (const [type, color] of Object.entries(typeColors)) {
+      for (const [type, color] of Object.entries(colors)) {
         if (name.toLowerCase().includes(type)) return color;
       }
       return 0xcccccc;
     }
 
-    // ===== PLAYER AND ENEMIES =====
     let player = null;
     let enemies = [];
-    let allies = [];
 
     function initPlayer(starterName) {
       if (player) scene.remove(player);
@@ -583,72 +656,58 @@
 
     function spawnEnemy(x, z, isShadow = false) {
       const enemyNames = ['squirtle', 'charmander', 'bulbasaur', 'pikachu'];
-      const enemyName = (isShadow ? 'shadow_' : '') + enemyNames[Math.floor(Math.random() * enemyNames.length)];
-      const enemy = createToyPokemon(enemyName);
+      const name = (isShadow ? 'shadow_' : '') + enemyNames[Math.floor(Math.random() * enemyNames.length)];
+      const enemy = createToyPokemon(name);
       enemy.position.set(x, 0, z);
       enemy.userData = {
-        name: enemyName,
+        name,
         hp: isShadow ? 80 : 50,
         maxHP: isShadow ? 80 : 50,
-        level: gameState.playerLevel,
-        isShadow: isShadow,
-        isMiniBoss: Math.random() < 0.1 && !isShadow,
+        isShadow,
         velocity: new THREE.Vector3(),
         attackCooldown: 0
       };
-      if (enemy.userData.isMiniBoss) {
-        enemy.userData.hp *= 2;
-        enemy.userData.maxHP *= 2;
-        enemy.scale.set(1.3, 1.3, 1.3);
-      }
       scene.add(enemy);
       enemies.push(enemy);
     }
 
-    // ===== INPUT =====
     const keys = {};
     window.addEventListener('keydown', (e) => {
+      if (gameState.cutsceneActive) {
+        if (e.key === ' ' || e.key === 'Enter') skipCutscene();
+        return;
+      }
       keys[e.key.toLowerCase()] = true;
-      if (e.key === ' ') { e.preventDefault(); if (!gameState.purifying) performAttack(1); }
+      if (e.key === ' ') { e.preventDefault(); performAttack(1); }
       if (e.key === 'e') performAttack(2);
-      if (e.key === 'q') performDodge();
       if (e.key === 'Escape') togglePause();
       if (e.key === 'm') toggleMap();
       if (e.key === 'p') togglePokedex();
     });
     window.addEventListener('keyup', (e) => { keys[e.key.toLowerCase()] = false; });
 
-    // ===== COMBAT =====
     function performAttack(moveNum) {
-      if (!player || gameState.purifying) return;
+      if (!player || gameState.cutsceneActive) return;
       const cooldownKey = `move${moveNum}Cooldown`;
       if (player.userData[cooldownKey] > 0) return;
 
-      player.userData[cooldownKey] = 2;
-      const moveBtn = document.getElementById(`moveBtn${moveNum}`);
-      moveBtn.style.opacity = '0.5';
+      player.userData[cooldownKey] = 1.5;
+      document.getElementById(`moveBtn${moveNum}`).classList.add('cooldown');
 
-      // Find closest enemy
       let closest = null;
       let minDist = Infinity;
       enemies.forEach(e => {
         const dist = player.position.distanceTo(e.position);
-        if (dist < minDist) { minDist = dist; closest = e; }
+        if (dist < minDist && dist < 8) { minDist = dist; closest = e; }
       });
 
-      if (closest && minDist < 8) {
+      if (closest) {
         const damage = 15 + Math.random() * 10;
         closest.userData.hp -= damage;
         if (closest.userData.hp <= 0) {
           handleEnemyDefeated(closest);
         }
       }
-    }
-
-    function performDodge() {
-      if (!player) return;
-      player.userData.velocity.x += (Math.random() - 0.5) * 20;
-      player.userData.velocity.z += (Math.random() - 0.5) * 20;
     }
 
     function handleEnemyDefeated(enemy) {
@@ -660,135 +719,136 @@
       gameState.playerHP = gameState.playerMaxHP;
       player.userData.hp = gameState.playerMaxHP;
 
-      if (enemy.userData.isShadow || enemy.userData.isMiniBoss) {
-        showPurificationUI(enemy.userData.name);
+      if (enemy.userData.isShadow) {
+        const isShiny = Math.random() < 0.15;
+        const pokeId = Math.floor(Math.random() * 151) + 1;
+        gameState.pokedex[pokeId] = true;
+        if (isShiny) gameState.shinies[pokeId] = true;
+
+        if (isShiny) {
+          addNotification('✨ SHINY PURIFIED! ✨', true);
+        } else {
+          addNotification('✓ Pokémon Purified!');
+        }
       } else {
         addNotification('Pokémon Defeated!');
       }
+
+      updateTeamHUD();
     }
 
-    // ===== PURIFICATION =====
-    let purificationData = { name: '', taps: 0, target: 20 };
+    const cutsceneFrames = [
+      { text: "In the darkness of night, the sky cracks open...", delay: 2000 },
+      { text: "A great bird rises from the ocean... LUGIA!", delay: 3000 },
+      { text: "But something is wrong...", delay: 2000 },
+      { text: "A purple beam strikes from the shadows!", delay: 2500 },
+      { text: "LUGIA transforms... corrupted by dark magic!", delay: 3000 },
+      { text: "In a hidden chamber...", delay: 2000 },
+      { text: "👻👻👻 The Gastly Coven chants... 👻👻👻", delay: 2500, isGastly: true },
+      { text: "Their Shadow Potion spreads corruption across the world...", delay: 3000 },
+      { text: "One by one, the legendary Pokémon fall to darkness.", delay: 3500 },
+      { text: "You drive toward your grandfather's house...", delay: 3000 },
+      { text: "You never knew him well...", delay: 2500 },
+      { text: "But his legacy is now YOUR burden.", delay: 3000 },
+      { text: "📖 POKÉMON: LEGACY OF THE SHADOWS 📖", delay: 3000 }
+    ];
 
-    function showPurificationUI(pokemonName) {
-      gameState.purifying = true;
-      purificationData = { name: pokemonName, taps: 0, target: 20 };
-      document.getElementById('purificationOverlay').style.display = 'flex';
-      document.getElementById('purificationPrompt').textContent = `PURIFY ${pokemonName.toUpperCase()}!`;
-      document.getElementById('purificationProgress').style.width = '0%';
-      document.getElementById('purificationTaps').textContent = '0';
+    let cutsceneIndex = 0;
+
+    function showCutscene() {
+      gameState.cutsceneActive = true;
+      document.getElementById('cutsceneOverlay').classList.add('active');
+      playNextCutsceneFrame();
     }
 
-    function purifyTap() {
-      if (!gameState.purifying) return;
-      purificationData.taps++;
-      const progress = (purificationData.taps / purificationData.target) * 100;
-      document.getElementById('purificationProgress').style.width = Math.min(progress, 100) + '%';
-      document.getElementById('purificationTaps').textContent = purificationData.taps;
+    function playNextCutsceneFrame() {
+      if (cutsceneIndex >= cutsceneFrames.length) {
+        skipCutscene();
+        return;
+      }
 
-      if (purificationData.taps >= purificationData.target) {
-        completePurification();
+      const frame = cutsceneFrames[cutsceneIndex];
+      const content = document.getElementById('cutsceneContent');
+      content.innerHTML = `<div class="cutscene-text ${frame.isGastly ? 'gastly-chant' : ''}">${frame.text}</div>`;
+      cutsceneIndex++;
+
+      setTimeout(playNextCutsceneFrame, frame.delay);
+    }
+
+    function skipCutscene() {
+      gameState.cutsceneActive = false;
+      document.getElementById('cutsceneOverlay').classList.remove('active');
+      cutsceneIndex = 0;
+      if (!gameState.gameStarted) {
+        startGame();
       }
     }
 
-    function purifyRelease() {}
-
-    function completePurification() {
-      gameState.purifying = false;
-      document.getElementById('purificationOverlay').style.display = 'none';
-
-      const isShiny = Math.random() < 0.15;
-      const pokeId = Math.floor(Math.random() * 151) + 1;
-      gameState.pokedex[pokeId] = true;
-      if (isShiny) gameState.shinies[pokeId] = true;
-
-      const notification = isShiny ? `✨ SHINY PURIFIED! ✨` : `✓ Pokémon Purified!`;
-      addNotification(notification, isShiny);
-
-      if (Math.random() < 0.5) {
-        gameState.team.push({ name: purificationData.name, hp: 100, maxHP: 100 });
-        addNotification(`${purificationData.name} joined your team!`);
-      }
+    function selectStarter(name) {
+      gameState.starter = name;
+      document.getElementById('starterOverlay').classList.remove('active');
+      showCutscene();
     }
 
-    // ===== UI =====
-    function updateTeamHUD() {
-      for (let i = 0; i < 3; i++) {
-        const member = gameState.team[i];
-        const nameEl = document.getElementById(`team${i}Name`);
-        const hpEl = document.getElementById(`team${i}HP`);
-        if (member) {
-          nameEl.textContent = member.name.substring(0, 6);
-          hpEl.textContent = `${Math.ceil(member.hp)}/${member.maxHP}`;
-        } else {
-          nameEl.textContent = '–';
-          hpEl.textContent = '–';
-        }
-      }
-      document.getElementById('playerLevel').textContent = gameState.playerLevel;
-      document.getElementById('playerHP').textContent = Math.ceil(gameState.playerHP);
-    }
-
-    function addNotification(text, isShiny = false) {
-      const notif = document.createElement('div');
-      notif.className = 'notification' + (isShiny ? ' shiny' : '');
-      notif.textContent = text;
-      document.getElementById('ui').appendChild(notif);
-      setTimeout(() => notif.remove(), 3000);
+    function startGame() {
+      gameState.gameStarted = true;
+      initPlayer(gameState.starter);
+      spawnLandEnemies('Starter Valley');
     }
 
     function togglePause() {
+      if (!gameState.gameStarted) return;
       gameState.isPaused = !gameState.isPaused;
-      document.getElementById('menu').style.display = gameState.isPaused ? 'block' : 'none';
+      document.getElementById('pauseOverlay').style.display = gameState.isPaused ? 'flex' : 'none';
     }
 
     function toggleMap() {
-      const mapOverlay = document.getElementById('mapOverlay');
-      const isVisible = mapOverlay.style.display === 'block';
-      mapOverlay.style.display = isVisible ? 'none' : 'block';
-      if (!isVisible) populateMapUI();
+      const el = document.getElementById('mapOverlay');
+      el.style.display = el.style.display === 'flex' ? 'none' : 'flex';
+      if (el.style.display === 'flex') populateMap();
     }
 
     function togglePokedex() {
-      const pokedexOverlay = document.getElementById('pokedexOverlay');
-      const isVisible = pokedexOverlay.style.display === 'block';
-      pokedexOverlay.style.display = isVisible ? 'none' : 'block';
-      if (!isVisible) populatePokedexUI();
+      const el = document.getElementById('pokedexOverlay');
+      el.style.display = el.style.display === 'block' ? 'none' : 'block';
+      if (el.style.display === 'block') populatePokedex();
     }
 
-    function populateMapUI() {
+    function populateMap() {
       const landsList = document.getElementById('landsList');
       landsList.innerHTML = '';
       const lands = [
-        'Frostpeak Valley',
-        'Stonehorn Ridge',
-        'Blazebelly Crater',
-        'Suncinder Dunes',
-        'Gloomroot Caverns',
-        'Verdantwild Grove',
-        'Tidecall Reef',
-        'Shadow Realm'
+        { name: 'Frostpeak Valley', emoji: '❄️' },
+        { name: 'Stonehorn Ridge', emoji: '🏔️' },
+        { name: 'Blazebelly Crater', emoji: '🔥' },
+        { name: 'Suncinder Dunes', emoji: '🏜️' },
+        { name: 'Gloomroot Caverns', emoji: '🕳️' },
+        { name: 'Verdantwild Grove', emoji: '🌿' },
+        { name: 'Tidecall Reef', emoji: '🌊' },
+        { name: 'Shadow Realm', emoji: '🌑' }
       ];
+
       lands.forEach(land => {
         const btn = document.createElement('button');
-        btn.className = 'landBtn' + (gameState.completedLands.includes(land) ? ' completed' : '');
-        btn.textContent = land;
+        btn.className = 'land-btn';
+        if (gameState.completedLands.includes(land.name)) btn.classList.add('completed');
+        btn.textContent = `${land.emoji} ${land.name}`;
         btn.onclick = () => {
-          gameState.currentLand = land;
+          gameState.currentLand = land.name;
           toggleMap();
-          spawnLandEnemies(land);
+          spawnLandEnemies(land.name);
         };
         landsList.appendChild(btn);
       });
     }
 
-    function populatePokedexUI() {
+    function populatePokedex() {
       const grid = document.getElementById('pokedexGrid');
       grid.innerHTML = '';
       let caught = 0;
       for (let i = 1; i <= 151; i++) {
         const slot = document.createElement('div');
-        slot.className = 'pokedexSlot';
+        slot.className = 'pokedex-slot';
         if (gameState.pokedex[i]) {
           caught++;
           slot.classList.add('caught');
@@ -805,146 +865,106 @@
     function spawnLandEnemies(landName) {
       enemies.forEach(e => scene.remove(e));
       enemies = [];
-
-      const enemyCount = 8 + Math.floor(Math.random() * 4);
-      for (let i = 0; i < enemyCount; i++) {
+      const count = 8 + Math.floor(Math.random() * 4);
+      for (let i = 0; i < count; i++) {
         const x = (Math.random() - 0.5) * 40;
         const z = 10 + Math.random() * 30;
         const isShadow = Math.random() < 0.3;
         spawnEnemy(x, z, isShadow);
       }
-
       addNotification(`Entered ${landName}!`);
-    }
-
-    function selectStarter(name) {
-      gameState.starter = name;
-      gameState.gameStarted = true;
-      document.getElementById('starterSelect').style.display = 'none';
-      initPlayer(name);
-      spawnLandEnemies('Starter Valley');
-    }
-
-    function saveGame() {
-      const save = {
-        starter: gameState.starter,
-        playerLevel: gameState.playerLevel,
-        team: gameState.team,
-        pokedex: gameState.pokedex,
-        shinies: gameState.shinies,
-        completedLands: gameState.completedLands
-      };
-      localStorage.setItem('legacySave', JSON.stringify(save));
-      addNotification('Game Saved!');
-    }
-
-    function loadGame() {
-      const save = localStorage.getItem('legacySave');
-      if (save) {
-        const data = JSON.parse(save);
-        gameState.starter = data.starter;
-        gameState.playerLevel = data.playerLevel;
-        gameState.team = data.team;
-        gameState.pokedex = data.pokedex;
-        gameState.shinies = data.shinies;
-        gameState.completedLands = data.completedLands;
-        selectStarter(gameState.starter);
-      }
     }
 
     function mainMenu() {
       gameState.gameStarted = false;
       gameState.isPaused = false;
-      document.getElementById('menu').style.display = 'none';
-      document.getElementById('starterSelect').style.display = 'block';
+      document.getElementById('pauseOverlay').style.display = 'none';
+      document.getElementById('starterOverlay').classList.add('active');
       enemies.forEach(e => scene.remove(e));
       enemies = [];
       if (player) scene.remove(player);
       player = null;
     }
 
-    // ===== ANIMATION LOOP =====
+    function addNotification(text, isShiny = false) {
+      const notif = document.createElement('div');
+      notif.className = 'notification' + (isShiny ? ' shiny' : '');
+      notif.textContent = text;
+      document.getElementById('ui').appendChild(notif);
+      setTimeout(() => notif.remove(), 3000);
+    }
+
+    function updateTeamHUD() {
+      for (let i = 0; i < 3; i++) {
+        const member = gameState.team[i];
+        document.getElementById(`team${i}Name`).textContent = member ? member.name.substring(0, 6) : '—';
+        document.getElementById(`team${i}HP`).textContent = member ? `${Math.ceil(member.hp)}/${member.maxHP}` : '—';
+      }
+      document.getElementById('playerLevel').textContent = gameState.playerLevel;
+      document.getElementById('playerHP').textContent = Math.ceil(gameState.playerHP);
+    }
+
     let lastTime = Date.now();
-    let frameCount = 0;
-    let fps = 60;
 
     function animate() {
       requestAnimationFrame(animate);
 
       const now = Date.now();
-      const dt = (now - lastTime) / 1000;
+      const dt = Math.min((now - lastTime) / 1000, 0.016);
       lastTime = now;
-      frameCount++;
-      if (frameCount % 10 === 0) fps = Math.round(1 / dt);
 
-      if (!gameState.isPaused && player) {
-        // Player movement
-        const moveForce = 30;
-        if (keys['w']) player.userData.velocity.z -= moveForce * dt;
-        if (keys['s']) player.userData.velocity.z += moveForce * dt;
-        if (keys['a']) player.userData.velocity.x -= moveForce * dt;
-        if (keys['d']) player.userData.velocity.x += moveForce * dt;
+      if (!gameState.isPaused && player && gameState.gameStarted && !gameState.cutsceneActive) {
+        if (keys['w']) player.userData.velocity.z -= 30 * dt;
+        if (keys['s']) player.userData.velocity.z += 30 * dt;
+        if (keys['a']) player.userData.velocity.x -= 30 * dt;
+        if (keys['d']) player.userData.velocity.x += 30 * dt;
 
-        // Friction
         player.userData.velocity.multiplyScalar(0.85);
         player.position.add(player.userData.velocity.clone().multiplyScalar(dt));
-
-        // Boundary
         player.position.clampScalar(-80, 80);
 
-        // Update camera
         camera.position.copy(player.position).add(new THREE.Vector3(0, 12, 15));
         camera.lookAt(player.position.clone().add(new THREE.Vector3(0, 2, 0)));
 
-        // Enemy AI and attacks
         enemies.forEach(enemy => {
           const dir = player.position.clone().sub(enemy.position);
           const dist = dir.length();
           if (dist > 0.1) dir.normalize();
 
-          // Chase player
           const moveSpeed = enemy.userData.isShadow ? 12 : 8;
           enemy.userData.velocity.add(dir.multiplyScalar(moveSpeed * dt));
           enemy.userData.velocity.multiplyScalar(0.8);
           enemy.position.add(enemy.userData.velocity.clone().multiplyScalar(dt));
 
-          // Attack
           enemy.userData.attackCooldown -= dt;
           if (dist < 5 && enemy.userData.attackCooldown <= 0) {
-            const damage = 5 + Math.random() * 5;
-            player.userData.hp -= damage;
+            player.userData.hp -= 5 + Math.random() * 5;
             gameState.playerHP = player.userData.hp;
             enemy.userData.attackCooldown = 1.5;
           }
         });
 
-        // Update cooldowns
         player.userData.move1Cooldown -= dt;
         player.userData.move2Cooldown -= dt;
-        if (player.userData.move1Cooldown <= 0) document.getElementById('moveBtn1').style.opacity = '1';
-        if (player.userData.move2Cooldown <= 0) document.getElementById('moveBtn2').style.opacity = '1';
+        if (player.userData.move1Cooldown <= 0) document.getElementById('moveBtn1').classList.remove('cooldown');
+        if (player.userData.move2Cooldown <= 0) document.getElementById('moveBtn2').classList.remove('cooldown');
 
-        // Check player defeat
         if (player.userData.hp <= 0) {
-          addNotification('You were defeated! Game Over.');
+          addNotification('Game Over!');
           mainMenu();
         }
       }
 
-      document.getElementById('fps').textContent = fps;
-      document.getElementById('enemyCount').textContent = enemies.length;
       updateTeamHUD();
       renderer.render(scene, camera);
     }
 
-    // ===== STARTUP =====
     window.addEventListener('load', () => {
-      loadGame();
-      if (!gameState.gameStarted) {
-        document.getElementById('starterSelect').style.display = 'block';
-      }
       animate();
+      loadGame();
     });
+
+    document.getElementById('cutsceneOverlay').addEventListener('click', skipCutscene);
   </script>
 </body>
 </html>
