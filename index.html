@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Pokémon: Legacy of the Shadows - 3D Adventures</title>
+  <title>Pokémon: Legacy of the Shadows</title>
   <style>
     * {
       margin: 0;
@@ -27,27 +27,284 @@
       flex-direction: column;
     }
 
-    #gameArea {
+    /* ============ START SCREEN ============ */
+    #startScreen {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      gap: 30px;
+    }
+
+    .start-title {
+      font-size: 72px;
+      font-weight: bold;
+      text-shadow: 3px 3px 0px rgba(0, 0, 0, 0.5);
+      animation: float 3s ease-in-out infinite;
+    }
+
+    .start-subtitle {
+      font-size: 24px;
+      color: rgba(255, 255, 255, 0.9);
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    }
+
+    .start-buttons {
+      display: flex;
+      gap: 20px;
+      margin-top: 20px;
+    }
+
+    .start-btn {
+      padding: 15px 40px;
+      font-size: 20px;
+      font-weight: bold;
+      border: none;
+      border-radius: 15px;
+      cursor: pointer;
+      transition: all 0.3s;
+      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+    }
+
+    .start-btn.new {
+      background: linear-gradient(135deg, #ff6b6b, #ff8787);
+      color: white;
+    }
+
+    .start-btn.new:hover {
+      transform: scale(1.1);
+      box-shadow: 0 0 20px rgba(255, 107, 107, 0.6);
+    }
+
+    .start-btn.continue {
+      background: linear-gradient(135deg, #4ecdc4, #44a08d);
+      color: white;
+    }
+
+    .start-btn.continue:hover {
+      transform: scale(1.1);
+      box-shadow: 0 0 20px rgba(78, 205, 196, 0.6);
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-20px); }
+    }
+
+    /* ============ HOUSE REPAIR GAME ============ */
+    #houseScreen {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(180deg, #87ceeb 0%, #e0f6ff 100%);
+      display: none;
+      flex-direction: column;
+      z-index: 900;
+    }
+
+    #houseContainer {
       flex: 1;
       position: relative;
-      background: linear-gradient(to bottom, #87ceeb 0%, #90ee90 100%);
+      display: flex;
+      justify-content: center;
+      align-items: center;
       overflow: hidden;
     }
 
-    canvas {
-      width: 100%;
-      height: 100%;
+    #houseCanvas {
       display: block;
     }
 
     #houseUI {
       position: absolute;
-      top: 0;
-      left: 0;
+      width: 100%;
+      padding: 20px;
+      background: rgba(0, 0, 0, 0.7);
+      text-align: center;
+      color: white;
+    }
+
+    #houseUI h2 {
+      font-size: 28px;
+      margin-bottom: 10px;
+      color: #ffaa00;
+    }
+
+    #houseUI p {
+      font-size: 18px;
+      margin-bottom: 15px;
+    }
+
+    .repair-items {
+      display: flex;
+      gap: 15px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .repair-item {
+      padding: 12px 25px;
+      background: #4CAF50;
+      border: 2px solid #45a049;
+      border-radius: 8px;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s;
+      font-size: 14px;
+    }
+
+    .repair-item:hover {
+      background: #45a049;
+      transform: scale(1.05);
+    }
+
+    .repair-item.done {
+      background: #888;
+      cursor: not-allowed;
+      opacity: 0.6;
+    }
+
+    #houseProgress {
+      margin-top: 15px;
+      font-size: 16px;
+    }
+
+    .progress-bar {
+      width: 300px;
+      height: 25px;
+      background: rgba(100, 100, 100, 0.5);
+      border: 2px solid #ffaa00;
+      border-radius: 12px;
+      margin: 10px auto;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #4CAF50, #45a049);
+      width: 0%;
+      transition: width 0.3s;
+    }
+
+    #continueBtn {
+      margin-top: 20px;
+      padding: 15px 40px;
+      font-size: 18px;
+      background: #667eea;
+      border: none;
+      border-radius: 8px;
+      color: white;
+      cursor: pointer;
+      font-weight: bold;
+      display: none;
+    }
+
+    #continueBtn:hover {
+      background: #5568d3;
+    }
+
+    /* ============ WORLD MAP ============ */
+    #mapScreen {
+      position: absolute;
       width: 100%;
       height: 100%;
-      pointer-events: none;
-      z-index: 10;
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+      display: none;
+      flex-direction: column;
+      z-index: 800;
+      padding: 40px;
+    }
+
+    #mapScreen h1 {
+      text-align: center;
+      font-size: 48px;
+      margin-bottom: 40px;
+      color: #ffaa00;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+    }
+
+    .worlds-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 30px;
+      flex: 1;
+      max-width: 1200px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    .world-card {
+      background: rgba(255, 255, 255, 0.1);
+      border: 3px solid #ffaa00;
+      border-radius: 15px;
+      padding: 30px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 15px;
+      min-height: 250px;
+    }
+
+    .world-card:hover {
+      background: rgba(255, 255, 255, 0.2);
+      transform: scale(1.05);
+      box-shadow: 0 0 30px rgba(255, 170, 0, 0.5);
+    }
+
+    .world-emoji {
+      font-size: 80px;
+      animation: bounce 2s infinite;
+    }
+
+    .world-card:nth-child(2) .world-emoji {
+      animation-delay: 0.2s;
+    }
+
+    .world-card:nth-child(3) .world-emoji {
+      animation-delay: 0.4s;
+    }
+
+    .world-card:nth-child(4) .world-emoji {
+      animation-delay: 0.6s;
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-20px); }
+    }
+
+    .world-name {
+      font-size: 32px;
+      font-weight: bold;
+      color: #fff;
+    }
+
+    .world-desc {
+      font-size: 16px;
+      color: #ddd;
+    }
+
+    /* ============ GAME AREA ============ */
+    #gameArea {
+      flex: 1;
+      position: relative;
+      overflow: hidden;
+    }
+
+    canvas {
+      display: block;
+      width: 100%;
+      height: 100%;
     }
 
     #statusBar {
@@ -79,709 +336,444 @@
       color: #ffaa00;
       font-family: 'Courier New', monospace;
     }
-
-    .progress-bar {
-      width: 100%;
-      height: 12px;
-      background: rgba(100, 100, 100, 0.3);
-      border: 1px solid #667eea;
-      border-radius: 6px;
-      margin-top: 4px;
-      overflow: hidden;
-    }
-
-    .progress-fill {
-      height: 100%;
-      background: linear-gradient(90deg, #667eea, #764ba2);
-      transition: width 0.2s ease;
-    }
-
-    /* Control hints */
-    #controlHints {
-      position: absolute;
-      bottom: 20px;
-      left: 20px;
-      background: rgba(0, 0, 0, 0.8);
-      border: 2px solid #667eea;
-      border-radius: 8px;
-      padding: 12px 15px;
-      font-size: 12px;
-      color: #aaa;
-      z-index: 20;
-      pointer-events: none;
-    }
-
-    #controlHints div {
-      margin: 3px 0;
-    }
-
-    /* Team HUD */
-    #teamHUD {
-      position: absolute;
-      top: 20px;
-      right: 20px;
-      background: rgba(0, 0, 0, 0.9);
-      border: 2px solid #667eea;
-      border-radius: 8px;
-      padding: 10px;
-      z-index: 20;
-      pointer-events: none;
-    }
-
-    .team-member-badge {
-      width: 50px;
-      height: 50px;
-      background: rgba(102, 126, 234, 0.2);
-      border: 2px solid #667eea;
-      border-radius: 4px;
-      display: inline-block;
-      margin: 3px;
-      text-align: center;
-      font-size: 24px;
-    }
-
-    /* Battle/Encounter Modal */
-    .modal {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.95);
-      z-index: 1000;
-      align-items: center;
-      justify-content: center;
-      pointer-events: auto;
-    }
-
-    .modal.active {
-      display: flex;
-      animation: fadeIn 0.3s ease;
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
-    }
-
-    .modal-content {
-      background: linear-gradient(135deg, #1a1a2e, #16213e);
-      border: 4px solid #ffaa00;
-      border-radius: 20px;
-      padding: 40px;
-      max-width: 600px;
-      max-height: 80vh;
-      overflow-y: auto;
-      box-shadow: 0 0 50px rgba(255, 170, 0, 0.3);
-      text-align: center;
-    }
-
-    .modal-content h2 {
-      color: #ffaa00;
-      font-size: 28px;
-      margin-bottom: 20px;
-    }
-
-    .modal-btn {
-      width: 100%;
-      padding: 12px;
-      margin: 8px 0;
-      background: linear-gradient(135deg, #667eea, #764ba2);
-      color: white;
-      border: 2px solid #ffaa00;
-      border-radius: 8px;
-      font-weight: bold;
-      font-size: 14px;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-
-    .modal-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
-    }
-
-    .notification {
-      position: absolute;
-      top: 20px;
-      left: 20px;
-      background: rgba(0, 0, 0, 0.95);
-      color: #00ff00;
-      padding: 12px 20px;
-      border: 2px solid #00ff00;
-      border-radius: 8px;
-      font-weight: bold;
-      animation: slideIn 0.3s ease-out;
-      z-index: 150;
-      pointer-events: none;
-      font-size: 13px;
-    }
-
-    @keyframes slideIn {
-      from { transform: translateX(-400px); opacity: 0; }
-      to { transform: translateX(0); opacity: 1; }
-    }
-
-    #advButton {
-      position: absolute;
-      bottom: 20px;
-      right: 20px;
-      padding: 12px 25px;
-      background: linear-gradient(135deg, #667eea, #764ba2);
-      color: white;
-      border: 2px solid #ffaa00;
-      border-radius: 8px;
-      font-weight: bold;
-      font-size: 14px;
-      cursor: pointer;
-      transition: all 0.2s;
-      z-index: 20;
-      pointer-events: auto;
-    }
-
-    #advButton:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
-    }
-
-    #advButton:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-    }
-
-    .starter-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 15px;
-      margin: 20px 0;
-    }
-
-    .starter-option {
-      padding: 20px;
-      background: rgba(102, 126, 234, 0.3);
-      border: 3px solid #667eea;
-      border-radius: 12px;
-      color: white;
-      font-weight: bold;
-      font-size: 16px;
-      cursor: pointer;
-      transition: all 0.3s;
-    }
-
-    .starter-option:hover {
-      background: rgba(102, 126, 234, 0.6);
-      transform: scale(1.05);
-    }
   </style>
 </head>
 <body>
   <div id="gameContainer">
+    <!-- START SCREEN -->
+    <div id="startScreen">
+      <div class="start-title">🔴 Pokémon 🔴</div>
+      <div class="start-subtitle">Legacy of the Shadows</div>
+      <div class="start-buttons">
+        <button class="start-btn new" onclick="startNewGame()">New Game</button>
+        <button class="start-btn continue" onclick="continueGame()" id="continueGame" style="display:none;">Continue</button>
+      </div>
+    </div>
+
+    <!-- HOUSE REPAIR SCREEN -->
+    <div id="houseScreen">
+      <div id="houseContainer">
+        <canvas id="houseCanvas"></canvas>
+        <div id="houseUI" style="position: absolute; bottom: 0; width: 100%; background: rgba(0, 0, 0, 0.85); padding: 20px; text-align: center;">
+          <h2>⚒️ Repair Your House!</h2>
+          <p id="repairText">Click items to fix them</p>
+          <div class="repair-items">
+            <button class="repair-item" onclick="repairItem(0)">🚪 Door</button>
+            <button class="repair-item" onclick="repairItem(1)">🪟 Window</button>
+            <button class="repair-item" onclick="repairItem(2)">🛏️ Bed</button>
+            <button class="repair-item" onclick="repairItem(3)">🪑 Chair</button>
+          </div>
+          <div id="houseProgress">
+            <p id="progressText">Progress: 0/4</p>
+            <div class="progress-bar">
+              <div class="progress-fill" id="progressBar"></div>
+            </div>
+          </div>
+          <button id="continueBtn" onclick="goToMap()">Continue to Adventure ➜</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- WORLD MAP SCREEN -->
+    <div id="mapScreen">
+      <h1>Choose Your First Adventure</h1>
+      <div class="worlds-grid">
+        <div class="world-card" onclick="selectWorld('grassland')">
+          <div class="world-emoji">🌱</div>
+          <div class="world-name">Grassland</div>
+          <div class="world-desc">Beginner-Friendly Fields</div>
+        </div>
+        <div class="world-card" onclick="selectWorld('volcano')">
+          <div class="world-emoji">🌋</div>
+          <div class="world-name">Volcano</div>
+          <div class="world-desc">Hot & Intense</div>
+        </div>
+        <div class="world-card" onclick="selectWorld('ocean')">
+          <div class="world-emoji">🌊</div>
+          <div class="world-name">Ocean</div>
+          <div class="world-desc">Water Adventures</div>
+        </div>
+        <div class="world-card" onclick="selectWorld('mountain')">
+          <div class="world-emoji">⛰️</div>
+          <div class="world-name">Mountain</div>
+          <div class="world-desc">High Altitude</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- GAME AREA -->
     <div id="gameArea">
       <canvas id="canvas"></canvas>
-      <div id="houseUI">
-        <div id="teamHUD">
-          <strong style="color: #ffaa00;">👥 Team</strong>
-          <div id="teamList"></div>
-        </div>
-
-        <div id="controlHints">
-          <div>⬆️⬇️⬅️➡️ Move | SPACE Jump</div>
-          <div>🎮 WASD Alternative | ESC Menu</div>
-          <div>📊 Stats at bottom | 🦸 Your team listed</div>
-        </div>
-
-        <button id="advButton" onclick="game.startAdventure()">⚔️ Start Adventure!</button>
-      </div>
     </div>
 
+    <!-- STATUS BAR -->
     <div id="statusBar">
       <div class="status-item">
-        <div class="status-label">LEVEL</div>
-        <div class="status-value" id="levelValue">1</div>
+        <div class="status-label">Level</div>
+        <div class="status-value" id="levelStatus">1</div>
       </div>
-
       <div class="status-item">
-        <div class="status-label">HEALTH</div>
-        <div class="progress-bar">
-          <div class="progress-fill" id="healthBar" style="width: 100%;"></div>
-        </div>
-        <div class="status-value" id="healthValue">100/100</div>
+        <div class="status-label">Health</div>
+        <div class="status-value" id="healthStatus">100/100</div>
       </div>
-
       <div class="status-item">
-        <div class="status-label">LOCATION</div>
-        <div class="status-value" id="locationValue">Home</div>
+        <div class="status-label">Location</div>
+        <div class="status-value" id="locationStatus">--</div>
       </div>
-
       <div class="status-item">
-        <div class="status-label">POKÉMON CAUGHT</div>
-        <div class="status-value" id="caughtValue">1/16</div>
+        <div class="status-label">Pokédex</div>
+        <div class="status-value" id="pokedexStatus">0/16</div>
       </div>
-
       <div class="status-item">
-        <div class="status-label">PLAY TIME</div>
-        <div class="status-value" id="playtimeValue">0h</div>
+        <div class="status-label">Time</div>
+        <div class="status-value" id="timeStatus">0:00</div>
       </div>
     </div>
   </div>
 
-  <!-- Starter Modal -->
-  <div id="starterModal" class="modal active">
-    <div class="modal-content">
-      <h2>Choose Your Companion!</h2>
-      <p style="margin-bottom: 25px; color: #aaa;">Pick a Pokémon for your 3D adventure</p>
-      <div class="starter-grid">
-        <div class="starter-option" onclick="game.selectStarter('4')">
-          <div style="font-size: 60px; margin-bottom: 10px;">🔥</div>
-          <div>Charmander</div>
-        </div>
-        <div class="starter-option" onclick="game.selectStarter('7')">
-          <div style="font-size: 60px; margin-bottom: 10px;">💧</div>
-          <div>Squirtle</div>
-        </div>
-        <div class="starter-option" onclick="game.selectStarter('1')">
-          <div style="font-size: 60px; margin-bottom: 10px;">🌿</div>
-          <div>Bulbasaur</div>
-        </div>
-        <div class="starter-option" onclick="game.selectStarter('25')">
-          <div style="font-size: 60px; margin-bottom: 10px;">⚡</div>
-          <div>Pikachu</div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Battle Modal -->
-  <div id="battleModal" class="modal">
-    <div class="modal-content">
-      <h2 id="battleTitle">Wild Pokémon Appeared!</h2>
-      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin: 30px 0; font-size: 48px;">
-        <div>
-          <div id="playerEmoji">🔥</div>
-          <div id="playerName" style="color: #00ff00; font-size: 14px; margin-top: 10px;"></div>
-        </div>
-        <div>
-          <div id="enemyEmoji">❓</div>
-          <div id="enemyName" style="color: #ff6464; font-size: 14px; margin-top: 10px;"></div>
-        </div>
-      </div>
-      <div style="margin: 20px 0;">
-        <button class="modal-btn" onclick="game.catchPokemon()">🔴 Catch</button>
-        <button class="modal-btn" onclick="game.battleWin()">⚡ Battle & Win</button>
-        <button class="modal-btn" onclick="game.runAway()">🏃 Run Away</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- Menu Modal -->
-  <div id="menuModal" class="modal">
-    <div class="modal-content">
-      <h2>⏸️ MENU</h2>
-      <button class="modal-btn" onclick="game.toggleMenu()">Resume</button>
-      <button class="modal-btn" onclick="game.saveGame()">Save Game</button>
-      <button class="modal-btn" onclick="game.returnHome()">Return Home</button>
-      <button class="modal-btn" onclick="game.mainMenu()">Main Menu</button>
-    </div>
-  </div>
-
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script>
-    const POKEMON_DATA = {
-      '1': { name: 'Bulbasaur', emoji: '🌿', color: 0x7ec74f },
-      '4': { name: 'Charmander', emoji: '🔥', color: 0xf08030 },
-      '7': { name: 'Squirtle', emoji: '💧', color: 0x78c8f0 },
-      '25': { name: 'Pikachu', emoji: '⚡', color: 0xf8d030 },
-      '35': { name: 'Clefairy', emoji: '🌟', color: 0xf8aef8 },
-      '39': { name: 'Jigglypuff', emoji: '🎀', color: 0xf8aef8 },
-      '54': { name: 'Psyduck', emoji: '🦆', color: 0xf8f030 },
-      '58': { name: 'Growlithe', emoji: '🐕', color: 0xf08030 },
-      '63': { name: 'Abra', emoji: '✨', color: 0xa890f0 },
-      '69': { name: 'Bellsprout', emoji: '🌱', color: 0x78c850 },
-      '74': { name: 'Geodude', emoji: '🪨', color: 0xc5b78c },
-      '79': { name: 'Slowpoke', emoji: '🐌', color: 0xf08888 },
-      '84': { name: 'Doduo', emoji: '🦅', color: 0xb88860 },
-      '92': { name: 'Gastly', emoji: '👻', color: 0x705898 },
-      '104': { name: 'Cubone', emoji: '🦴', color: 0xc5b78c },
-      '133': { name: 'Eevee', emoji: '🦊', color: 0xc8a882 }
+    // ============ GAME STATE ============
+    let gameState = {
+      currentScreen: 'start',
+      playerName: 'Trainer',
+      level: 1,
+      health: 100,
+      maxHealth: 100,
+      caught: [],
+      playTime: 0,
+      currentWorld: null,
+      houseRepaired: [false, false, false, false],
+      starterChosen: false
     };
 
-    const LOCATIONS = [
-      { name: 'Grassland', color: 0x90ee90, enemies: ['1', '54', '69', '133'] },
-      { name: 'Volcano', color: 0xff6b6b, enemies: ['4', '58', '92'] },
-      { name: 'Ocean', color: 0x4da6ff, enemies: ['7', '79', '84'] },
-      { name: 'Sky Realm', color: 0x87ceeb, enemies: ['25', '35', '39', '63'] },
-      { name: 'Mountain', color: 0x8b7355, enemies: ['74', '104'] }
-    ];
-
-    class Game {
-      constructor() {
-        this.canvas = document.getElementById('canvas');
-        this.scene = new THREE.Scene();
-        this.camera = new THREE.PerspectiveCamera(75, this.canvas.clientWidth / this.canvas.clientHeight, 0.1, 1000);
-        this.renderer = new THREE.WebGLRenderer({ canvas: this.canvas, antialias: true });
-        this.renderer.setSize(this.canvas.clientWidth, this.canvas.clientHeight);
-        this.renderer.shadowMap.enabled = true;
-
-        this.state = {
-          starter: null,
-          team: [],
-          caught: {},
-          level: 1,
-          health: 100,
-          maxHealth: 100,
-          currentLocation: 0,
-          inAdventure: false,
-          isPaused: false,
-          playTime: 0
-        };
-
-        this.player = null;
-        this.companion = null;
-        this.enemies = [];
-        this.projectiles = [];
-        this.particles = [];
-        this.keys = {};
-        this.camera.position.set(0, 5, 8);
-        this.camera.lookAt(0, 1, 0);
-
-        this.setupLights();
-        this.setupGround();
-        this.setupEventListeners();
-        this.loadGame();
-        this.animate();
-
-        this.startTime = Date.now();
+    // ============ CUTE POKÉMON DATA ============
+    const pokemonData = {
+      bulbasaur: {
+        name: 'Bulbasaur', emoji: '🌿', color: '#52c84a', type: 'grass',
+        baseColor: '#52c84a', eyes: { size: 6, color: 'black' },
+        accent: '#2d5016'
+      },
+      charmander: {
+        name: 'Charmander', emoji: '🔥', color: '#ff7f27', type: 'fire',
+        baseColor: '#ff7f27', eyes: { size: 6, color: 'black' },
+        accent: '#cc6319'
+      },
+      squirtle: {
+        name: 'Squirtle', emoji: '🐢', color: '#4a90a4', type: 'water',
+        baseColor: '#4a90a4', eyes: { size: 6, color: 'black' },
+        accent: '#2d5a71'
+      },
+      pikachu: {
+        name: 'Pikachu', emoji: '⚡', color: '#ffd700', type: 'electric',
+        baseColor: '#ffd700', eyes: { size: 7, color: 'black' },
+        accent: '#cc2e1d'
+      },
+      clefairy: {
+        name: 'Clefairy', emoji: '✨', color: '#ffb6d9', type: 'fairy',
+        baseColor: '#ffb6d9', eyes: { size: 6, color: 'black' },
+        accent: '#9d4569'
+      },
+      jigglypuff: {
+        name: 'Jigglypuff', emoji: '🎤', color: '#d9b3d9', type: 'normal',
+        baseColor: '#d9b3d9', eyes: { size: 6, color: 'black' },
+        accent: '#8b5a8b'
+      },
+      psyduck: {
+        name: 'Psyduck', emoji: '🦆', color: '#ffeb3b', type: 'water',
+        baseColor: '#ffeb3b', eyes: { size: 7, color: 'black' },
+        accent: '#cc7d00'
+      },
+      growlithe: {
+        name: 'Growlithe', emoji: '🐕', color: '#ff9c42', type: 'fire',
+        baseColor: '#ff9c42', eyes: { size: 6, color: 'black' },
+        accent: '#cc5519'
+      },
+      abra: {
+        name: 'Abra', emoji: '✋', color: '#996633', type: 'psychic',
+        baseColor: '#996633', eyes: { size: 7, color: '#ffff00' },
+        accent: '#663300'
+      },
+      bellsprout: {
+        name: 'Bellsprout', emoji: '🌱', color: '#00cc44', type: 'grass',
+        baseColor: '#00cc44', eyes: { size: 5, color: 'black' },
+        accent: '#008020'
+      },
+      geodude: {
+        name: 'Geodude', emoji: '🪨', color: '#999999', type: 'rock',
+        baseColor: '#999999', eyes: { size: 6, color: '#ffcc00' },
+        accent: '#663300'
+      },
+      slowpoke: {
+        name: 'Slowpoke', emoji: '🐚', color: '#d4a5a5', type: 'water',
+        baseColor: '#d4a5a5', eyes: { size: 6, color: 'black' },
+        accent: '#8b4444'
+      },
+      doduo: {
+        name: 'Doduo', emoji: '🦅', color: '#8b4513', type: 'normal',
+        baseColor: '#8b4513', eyes: { size: 5, color: 'black' },
+        accent: '#5c2e0f'
+      },
+      gastly: {
+        name: 'Gastly', emoji: '👻', color: '#6633cc', type: 'ghost',
+        baseColor: '#6633cc', eyes: { size: 7, color: '#ffff00' },
+        accent: '#440066'
+      },
+      cubone: {
+        name: 'Cubone', emoji: '🦴', color: '#cc9966', type: 'ground',
+        baseColor: '#cc9966', eyes: { size: 6, color: 'black' },
+        accent: '#8b5a2b'
+      },
+      eevee: {
+        name: 'Eevee', emoji: '🦊', color: '#d2691e', type: 'normal',
+        baseColor: '#d2691e', eyes: { size: 6, color: 'black' },
+        accent: '#8b4513'
       }
+    };
 
-      setupLights() {
-        const ambientLight = new THREE.AmbientLight(0xffffff, 0.7);
-        this.scene.add(ambientLight);
+    // ============ CUTE POKÉMON RENDERER ============
+    function drawCutePokemon(ctx, x, y, size, pokemon, animationTime) {
+      ctx.save();
+      ctx.translate(x, y);
 
-        const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
-        directionalLight.position.set(10, 15, 10);
-        directionalLight.castShadow = true;
-        directionalLight.shadow.mapSize.width = 2048;
-        directionalLight.shadow.mapSize.height = 2048;
-        this.scene.add(directionalLight);
-      }
+      // Bouncing animation
+      const bounce = Math.sin(animationTime * 0.006) * 3;
 
-      setupGround() {
-        const groundGeom = new THREE.PlaneGeometry(200, 200);
-        const groundMat = new THREE.MeshStandardMaterial({ color: 0x90ee90 });
-        const ground = new THREE.Mesh(groundGeom, groundMat);
-        ground.rotation.x = -Math.PI / 2;
-        ground.receiveShadow = true;
-        this.scene.add(ground);
-      }
+      // Body (cute rounded shape)
+      ctx.fillStyle = pokemon.baseColor;
+      ctx.beginPath();
+      ctx.ellipse(0, bounce, size * 0.6, size * 0.7, 0, 0, Math.PI * 2);
+      ctx.fill();
 
-      createCharacter(pokemonId) {
-        const group = new THREE.Group();
-        const poke = POKEMON_DATA[pokemonId];
+      // Head
+      ctx.fillStyle = pokemon.baseColor;
+      ctx.beginPath();
+      ctx.arc(0, -size * 0.5 + bounce, size * 0.5, 0, Math.PI * 2);
+      ctx.fill();
 
-        // Body
-        const bodyGeom = new THREE.SphereGeometry(0.6, 32, 32);
-        const bodyMat = new THREE.MeshStandardMaterial({ color: poke.color });
-        const body = new THREE.Mesh(bodyGeom, bodyMat);
-        body.position.y = 0.8;
-        body.castShadow = true;
-        group.add(body);
+      // Ears (left)
+      ctx.fillStyle = pokemon.baseColor;
+      ctx.beginPath();
+      ctx.ellipse(-size * 0.35, -size * 0.85 + bounce, size * 0.2, size * 0.3, -0.3, 0, Math.PI * 2);
+      ctx.fill();
 
-        // Head
-        const headGeom = new THREE.SphereGeometry(0.4, 32, 32);
-        const head = new THREE.Mesh(headGeom, bodyMat);
-        head.position.y = 1.4;
-        head.castShadow = true;
-        group.add(head);
+      // Ears (right)
+      ctx.beginPath();
+      ctx.ellipse(size * 0.35, -size * 0.85 + bounce, size * 0.2, size * 0.3, 0.3, 0, Math.PI * 2);
+      ctx.fill();
 
-        // Eyes
-        const eyeGeom = new THREE.SphereGeometry(0.08, 16, 16);
-        const eyeMat = new THREE.MeshStandardMaterial({ color: 0x000000 });
-        const eye1 = new THREE.Mesh(eyeGeom, eyeMat);
-        eye1.position.set(-0.15, 1.55, 0.35);
-        group.add(eye1);
-        const eye2 = new THREE.Mesh(eyeGeom, eyeMat);
-        eye2.position.set(0.15, 1.55, 0.35);
-        group.add(eye2);
+      // Eyes (big & cute)
+      ctx.fillStyle = pokemon.eyes.color;
+      ctx.beginPath();
+      ctx.arc(-size * 0.2, -size * 0.55 + bounce, pokemon.eyes.size, 0, Math.PI * 2);
+      ctx.fill();
 
-        // Legs
-        const legGeom = new THREE.BoxGeometry(0.2, 0.5, 0.2);
-        for (let i = 0; i < 4; i++) {
-          const leg = new THREE.Mesh(legGeom, bodyMat);
-          const offsetX = (i < 2 ? -1 : 1) * 0.25;
-          const offsetZ = (i % 2 === 0 ? -1 : 1) * 0.25;
-          leg.position.set(offsetX, 0.25, offsetZ);
-          leg.castShadow = true;
-          group.add(leg);
-        }
+      ctx.beginPath();
+      ctx.arc(size * 0.2, -size * 0.55 + bounce, pokemon.eyes.size, 0, Math.PI * 2);
+      ctx.fill();
 
-        // Label
-        const canvas = document.createElement('canvas');
-        canvas.width = 256;
-        canvas.height = 128;
-        const ctx = canvas.getContext('2d');
-        ctx.fillStyle = '#fff';
-        ctx.font = 'bold 48px Arial';
-        ctx.textAlign = 'center';
-        ctx.fillText(poke.name, 128, 80);
-        
-        const texture = new THREE.CanvasTexture(canvas);
-        const spriteMat = new THREE.MeshBasicMaterial({ map: texture });
-        const spriteGeom = new THREE.PlaneGeometry(2, 1);
-        const sprite = new THREE.Mesh(spriteGeom, spriteMat);
-        sprite.position.y = 2.2;
-        sprite.position.z = 0.1;
-        group.add(sprite);
+      // Eye shine (pupil)
+      ctx.fillStyle = 'white';
+      ctx.beginPath();
+      ctx.arc(-size * 0.18, -size * 0.57 + bounce, pokemon.eyes.size * 0.4, 0, Math.PI * 2);
+      ctx.fill();
 
-        return group;
-      }
+      ctx.beginPath();
+      ctx.arc(size * 0.22, -size * 0.57 + bounce, pokemon.eyes.size * 0.4, 0, Math.PI * 2);
+      ctx.fill();
 
-      selectStarter(pokemonId) {
-        this.state.starter = pokemonId;
-        this.state.team.push(pokemonId);
-        this.state.caught[pokemonId] = POKEMON_DATA[pokemonId];
-        document.getElementById('starterModal').classList.remove('active');
-        this.updateUI();
-        this.loadGame();
-      }
+      // Mouth (cute smile)
+      ctx.strokeStyle = pokemon.accent;
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.arc(0, -size * 0.3 + bounce, size * 0.15, 0, Math.PI);
+      ctx.stroke();
 
-      startAdventure() {
-        if (!this.state.starter) {
-          this.notify('⚠️ Choose a starter first!');
-          return;
-        }
+      // Accent color (belly/pattern)
+      ctx.fillStyle = pokemon.accent;
+      ctx.globalAlpha = 0.3;
+      ctx.beginPath();
+      ctx.ellipse(0, size * 0.1 + bounce, size * 0.4, size * 0.5, 0, 0, Math.PI * 2);
+      ctx.fill();
 
-        this.state.inAdventure = true;
-        this.state.currentLocation = Math.floor(Math.random() * LOCATIONS.length);
-        
-        // Clear scene
-        this.scene.children = this.scene.children.filter(c => c !== this.scene.background);
+      ctx.restore();
+    }
 
-        // Recreate lights and ground for new location
-        this.setupLights();
-        const location = LOCATIONS[this.state.currentLocation];
-        this.scene.background = new THREE.Color(location.color);
-        this.setupGround();
+    // ============ START SCREEN ============
+    function startNewGame() {
+      gameState.currentScreen = 'house';
+      document.getElementById('startScreen').style.display = 'none';
+      document.getElementById('houseScreen').style.display = 'flex';
+      drawHouseRepair();
+    }
 
-        // Create player character
-        if (this.player) this.scene.remove(this.player);
-        this.player = this.createCharacter(this.state.starter);
-        this.player.position.set(0, 0, 0);
-        this.scene.add(this.player);
+    function continueGame() {
+      gameState.currentScreen = 'map';
+      document.getElementById('startScreen').style.display = 'none';
+      document.getElementById('mapScreen').style.display = 'flex';
+    }
 
-        // Spawn enemies
-        this.enemies = [];
-        for (let i = 0; i < 3; i++) {
-          const enemyId = location.enemies[Math.floor(Math.random() * location.enemies.length)];
-          const enemy = this.createCharacter(enemyId);
-          enemy.position.set(Math.random() * 20 - 10, 0, Math.random() * 20 - 10);
-          enemy.pokemonId = enemyId;
-          this.scene.add(enemy);
-          this.enemies.push(enemy);
-        }
-
-        document.getElementById('advButton').disabled = true;
-        this.updateUI();
-      }
-
-      updatePlayerMovement() {
-        const speed = 0.1;
-        if (this.keys['ArrowUp'] || this.keys['w'] || this.keys['W']) {
-          this.player.position.z -= speed;
-        }
-        if (this.keys['ArrowDown'] || this.keys['s'] || this.keys['S']) {
-          this.player.position.z += speed;
-        }
-        if (this.keys['ArrowLeft'] || this.keys['a'] || this.keys['A']) {
-          this.player.position.x -= speed;
-        }
-        if (this.keys['ArrowRight'] || this.keys['d'] || this.keys['D']) {
-          this.player.position.x += speed;
-        }
-      }
-
-      updateEnemyAI() {
-        this.enemies.forEach(enemy => {
-          // Move towards player
-          const dx = this.player.position.x - enemy.position.x;
-          const dz = this.player.position.z - enemy.position.z;
-          const dist = Math.sqrt(dx * dx + dz * dz);
-
-          if (dist > 2) {
-            const speed = 0.02;
-            enemy.position.x += (dx / dist) * speed;
-            enemy.position.z += (dz / dist) * speed;
-          } else if (dist < 2 && Math.random() < 0.02) {
-            // Trigger battle
-            this.triggerBattle(enemy);
-          }
-        });
-      }
-
-      triggerBattle(enemy) {
-        const enemyId = enemy.pokemonId;
-        const enemyData = POKEMON_DATA[enemyId];
-
-        document.getElementById('battleTitle').textContent = `${enemyData.name} appeared!`;
-        document.getElementById('playerEmoji').textContent = POKEMON_DATA[this.state.starter].emoji;
-        document.getElementById('playerName').textContent = POKEMON_DATA[this.state.starter].name;
-        document.getElementById('enemyEmoji').textContent = enemyData.emoji;
-        document.getElementById('enemyName').textContent = enemyData.name;
-
-        this.currentBattle = { enemyId, enemyObj: enemy };
-        document.getElementById('battleModal').classList.add('active');
-        this.state.isPaused = true;
-      }
-
-      catchPokemon() {
-        const { enemyId, enemyObj } = this.currentBattle;
-        if (!this.state.caught[enemyId]) {
-          this.state.caught[enemyId] = POKEMON_DATA[enemyId];
-          this.notify(`✓ Caught ${POKEMON_DATA[enemyId].name}!`);
-        }
-        this.scene.remove(enemyObj);
-        this.enemies = this.enemies.filter(e => e !== enemyObj);
-        document.getElementById('battleModal').classList.remove('active');
-        this.state.isPaused = false;
-        this.updateUI();
-        this.saveGame();
-      }
-
-      battleWin() {
-        this.state.level = Math.floor(Object.keys(this.state.caught).length / 2) + 1;
-        const { enemyId, enemyObj } = this.currentBattle;
-        if (!this.state.caught[enemyId]) {
-          this.state.caught[enemyId] = POKEMON_DATA[enemyId];
-        }
-        this.scene.remove(enemyObj);
-        this.enemies = this.enemies.filter(e => e !== enemyObj);
-        this.notify(`⚡ Won! Pokémon caught: ${Object.keys(this.state.caught).length}/16`);
-        document.getElementById('battleModal').classList.remove('active');
-        this.state.isPaused = false;
-        this.updateUI();
-        this.saveGame();
-      }
-
-      runAway() {
-        this.notify('🏃 Ran away safely!');
-        document.getElementById('battleModal').classList.remove('active');
-        this.state.isPaused = false;
-      }
-
-      toggleMenu() {
-        this.state.isPaused = !this.state.isPaused;
-        document.getElementById('menuModal').classList.toggle('active');
-      }
-
-      returnHome() {
-        this.state.inAdventure = false;
-        this.state.isPaused = false;
-        this.enemies = [];
-        document.getElementById('menuModal').classList.remove('active');
-        document.getElementById('advButton').disabled = false;
-        this.scene.children = [];
-        this.setupLights();
-        this.setupGround();
-        this.updateUI();
-      }
-
-      mainMenu() {
-        this.state = {
-          starter: null,
-          team: [],
-          caught: {},
-          level: 1,
-          health: 100,
-          maxHealth: 100,
-          currentLocation: 0,
-          inAdventure: false,
-          isPaused: false,
-          playTime: 0
-        };
-        document.getElementById('starterModal').classList.add('active');
-        document.getElementById('menuModal').classList.remove('active');
-        this.returnHome();
-        this.saveGame();
-      }
-
-      updateUI() {
-        document.getElementById('levelValue').textContent = this.state.level;
-        document.getElementById('healthValue').textContent = `${this.state.health}/${this.state.maxHealth}`;
-        document.getElementById('healthBar').style.width = (this.state.health / this.state.maxHealth) * 100 + '%';
-        document.getElementById('locationValue').textContent = this.state.inAdventure ? LOCATIONS[this.state.currentLocation].name : 'Home';
-        document.getElementById('caughtValue').textContent = `${Object.keys(this.state.caught).length}/16`;
-
-        const hours = Math.floor(this.state.playTime / 3600);
-        document.getElementById('playtimeValue').textContent = `${hours}h`;
-
-        const teamList = document.getElementById('teamList');
-        teamList.innerHTML = '';
-        this.state.team.forEach(pokemonId => {
-          const badge = document.createElement('span');
-          badge.className = 'team-member-badge';
-          badge.textContent = POKEMON_DATA[pokemonId].emoji;
-          teamList.appendChild(badge);
-        });
-      }
-
-      setupEventListeners() {
-        window.addEventListener('keydown', (e) => {
-          this.keys[e.key] = true;
-          if (e.key === 'Escape') this.toggleMenu();
-        });
-        window.addEventListener('keyup', (e) => {
-          this.keys[e.key] = false;
-        });
-        window.addEventListener('resize', () => {
-          this.camera.aspect = this.canvas.clientWidth / this.canvas.clientHeight;
-          this.camera.updateProjectionMatrix();
-          this.renderer.setSize(this.canvas.clientWidth, this.canvas.clientHeight);
-        });
-      }
-
-      animate() {
-        requestAnimationFrame(() => this.animate());
-
-        if (this.state.inAdventure && !this.state.isPaused && this.player) {
-          this.updatePlayerMovement();
-          this.updateEnemyAI();
-
-          // Camera follows player
-          this.camera.position.x = this.player.position.x;
-          this.camera.position.z = this.player.position.z + 8;
-          this.camera.lookAt(this.player.position.x, 1, this.player.position.z);
-        }
-
-        this.state.playTime = (Date.now() - this.startTime) / 1000;
-        this.renderer.render(this.scene, this.camera);
-      }
-
-      saveGame() {
-        localStorage.setItem('pokemonAdventureGame', JSON.stringify(this.state));
-      }
-
-      loadGame() {
-        const saved = localStorage.getItem('pokemonAdventureGame');
-        if (saved) {
-          this.state = JSON.parse(saved);
-          if (this.state.starter) {
-            document.getElementById('starterModal').classList.remove('active');
-          }
-        }
-        this.updateUI();
-      }
-
-      notify(text) {
-        const notif = document.createElement('div');
-        notif.className = 'notification';
-        notif.textContent = text;
-        document.body.appendChild(notif);
-        setTimeout(() => notif.remove(), 3000);
+    // Check if save exists
+    function checkSave() {
+      const save = localStorage.getItem('pokemonSave');
+      if (save) {
+        document.getElementById('continueGame').style.display = 'inline-block';
       }
     }
 
-    const game = new Game();
-    window.game = game;
+    // ============ HOUSE REPAIR MINI-GAME ============
+    function drawHouseRepair() {
+      const canvas = document.getElementById('houseCanvas');
+      const ctx = canvas.getContext('2d');
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight - 200;
+
+      // Sky background
+      ctx.fillStyle = '#87ceeb';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      // Ground
+      ctx.fillStyle = '#90ee90';
+      ctx.fillRect(0, canvas.height * 0.7, canvas.width, canvas.height * 0.3);
+
+      // House
+      const houseX = canvas.width / 2 - 150;
+      const houseY = canvas.height * 0.4;
+
+      // House wall
+      ctx.fillStyle = gameState.houseRepaired[0] ? '#cd853f' : '#8b6f47';
+      ctx.fillRect(houseX, houseY, 300, 250);
+
+      // Roof
+      ctx.fillStyle = '#cc2e1d';
+      ctx.beginPath();
+      ctx.moveTo(houseX, houseY);
+      ctx.lineTo(houseX + 150, houseY - 80);
+      ctx.lineTo(houseX + 300, houseY);
+      ctx.fill();
+
+      // Door (clickable area: 220-280, 520-600)
+      ctx.fillStyle = gameState.houseRepaired[0] ? '#228B22' : '#8b4513';
+      ctx.fillRect(houseX + 120, houseY + 150, 60, 100);
+      ctx.fillStyle = '#ffdd00';
+      ctx.beginPath();
+      ctx.arc(houseX + 175, houseY + 200, 5, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Window (left)
+      ctx.fillStyle = gameState.houseRepaired[1] ? '#87ceeb' : '#999';
+      ctx.fillRect(houseX + 30, houseY + 60, 50, 50);
+
+      // Window (right)
+      ctx.fillRect(houseX + 220, houseY + 60, 50, 50);
+
+      // Bed (inside)
+      ctx.fillStyle = gameState.houseRepaired[2] ? '#ff69b4' : '#8b0000';
+      ctx.fillRect(houseX + 40, houseY + 180, 80, 50);
+
+      // Chair
+      ctx.fillStyle = gameState.houseRepaired[3] ? '#228B22' : '#666';
+      ctx.fillRect(houseX + 200, houseY + 170, 40, 40);
+
+      // Animation loop
+      requestAnimationFrame(drawHouseRepair);
+    }
+
+    function repairItem(index) {
+      if (!gameState.houseRepaired[index]) {
+        gameState.houseRepaired[index] = true;
+        updateHouseProgress();
+      }
+    }
+
+    function updateHouseProgress() {
+      const repaired = gameState.houseRepaired.filter(r => r).length;
+      const total = 4;
+      document.getElementById('progressBar').style.width = (repaired / total) * 100 + '%';
+      document.getElementById('progressText').textContent = `Progress: ${repaired}/${total}`;
+
+      const buttons = document.querySelectorAll('.repair-item');
+      buttons.forEach((btn, i) => {
+        if (gameState.houseRepaired[i]) {
+          btn.classList.add('done');
+          btn.disabled = true;
+        }
+      });
+
+      if (repaired === total) {
+        document.getElementById('continueBtn').style.display = 'block';
+      }
+    }
+
+    function goToMap() {
+      gameState.currentScreen = 'map';
+      document.getElementById('houseScreen').style.display = 'none';
+      document.getElementById('mapScreen').style.display = 'flex';
+    }
+
+    // ============ WORLD MAP ============
+    function selectWorld(world) {
+      gameState.currentWorld = world;
+      gameState.currentScreen = 'game';
+      document.getElementById('mapScreen').style.display = 'none';
+      document.getElementById('gameArea').style.display = 'flex';
+      document.getElementById('statusBar').style.display = 'grid';
+      startGame(world);
+    }
+
+    // ============ MAIN GAME ============
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+
+    function startGame(world) {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight - 60;
+
+      const worldColors = {
+        grassland: { bg: '#90ee90', ground: '#228B22' },
+        volcano: { bg: '#ff6b35', ground: '#cc2e1d' },
+        ocean: { bg: '#87ceeb', ground: '#4a90a4' },
+        mountain: { bg: '#b0c4de', ground: '#8b7355' }
+      };
+
+      const colors = worldColors[world];
+
+      // Game loop
+      setInterval(() => {
+        ctx.fillStyle = colors.bg;
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        // Ground
+        ctx.fillStyle = colors.ground;
+        ctx.fillRect(0, canvas.height * 0.7, canvas.width, canvas.height * 0.3);
+
+        // Draw cute Pokémon
+        let pokemonList = Object.values(pokemonData);
+        let cols = Math.ceil(Math.sqrt(pokemonList.length));
+        let size = Math.min(canvas.width / (cols + 1), 60);
+
+        pokemonList.forEach((pok, i) => {
+          const row = Math.floor(i / cols);
+          const col = i % cols;
+          const x = (col + 1) * (canvas.width / (cols + 1));
+          const y = (row + 1) * (canvas.height / 4);
+          drawCutePokemon(ctx, x, y, size, pok, Date.now());
+        });
+
+        // Update status
+        document.getElementById('locationStatus').textContent = world.toUpperCase();
+        document.getElementById('pokedexStatus').textContent = `${gameState.caught.length}/16`;
+      }, 30);
+
+      // Save game
+      localStorage.setItem('pokemonSave', JSON.stringify(gameState));
+    }
+
+    // ============ INITIALIZATION ============
+    checkSave();
+    window.addEventListener('resize', () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight - 60;
+    });
   </script>
 </body>
 </html>
