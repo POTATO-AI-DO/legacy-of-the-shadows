@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Pokémon: Legacy of the Shadows - House Renovation</title>
+  <title>Pokémon: Legacy of the Shadows - 3D Adventures</title>
   <style>
     * {
       margin: 0;
@@ -38,8 +38,6 @@
       width: 100%;
       height: 100%;
       display: block;
-      image-rendering: pixelated;
-      image-rendering: crisp-edges;
     }
 
     #houseUI {
@@ -98,155 +96,51 @@
       transition: width 0.2s ease;
     }
 
-    /* Task Panel */
-    #taskPanel {
+    /* Control hints */
+    #controlHints {
+      position: absolute;
+      bottom: 20px;
+      left: 20px;
+      background: rgba(0, 0, 0, 0.8);
+      border: 2px solid #667eea;
+      border-radius: 8px;
+      padding: 12px 15px;
+      font-size: 12px;
+      color: #aaa;
+      z-index: 20;
+      pointer-events: none;
+    }
+
+    #controlHints div {
+      margin: 3px 0;
+    }
+
+    /* Team HUD */
+    #teamHUD {
       position: absolute;
       top: 20px;
-      left: 20px;
-      background: rgba(0, 0, 0, 0.9);
-      border: 3px solid #667eea;
-      border-radius: 15px;
-      padding: 15px;
-      width: 300px;
-      pointer-events: auto;
-      max-height: 55vh;
-      overflow-y: auto;
-      z-index: 20;
-      backdrop-filter: blur(10px);
-    }
-
-    #taskPanel h3 {
-      color: #ffaa00;
-      margin-bottom: 12px;
-      font-size: 16px;
-    }
-
-    .task-item {
-      background: rgba(102, 126, 234, 0.2);
-      border-left: 4px solid #667eea;
-      padding: 10px;
-      margin-bottom: 8px;
-      border-radius: 6px;
-      cursor: pointer;
-      transition: all 0.2s;
-      font-size: 12px;
-    }
-
-    .task-item:hover {
-      background: rgba(102, 126, 234, 0.4);
-      transform: translateX(3px);
-    }
-
-    .task-item.active {
-      border-left-color: #00ff00;
-      background: rgba(0, 150, 100, 0.3);
-    }
-
-    .task-item.completed {
-      opacity: 0.5;
-      color: #aaa;
-    }
-
-    .task-name {
-      font-weight: bold;
-      margin-bottom: 3px;
-    }
-
-    /* Helper Panel */
-    #helperPanel {
-      position: absolute;
-      bottom: 120px;
       right: 20px;
       background: rgba(0, 0, 0, 0.9);
-      border: 3px solid #ffaa00;
-      border-radius: 15px;
-      padding: 15px;
-      width: 250px;
-      pointer-events: auto;
-      z-index: 20;
-      backdrop-filter: blur(10px);
-      max-height: 40vh;
-      overflow-y: auto;
-    }
-
-    #helperPanel h3 {
-      color: #ffaa00;
-      margin-bottom: 10px;
-      font-size: 14px;
-    }
-
-    .helper-slot {
-      background: rgba(102, 126, 234, 0.2);
       border: 2px solid #667eea;
       border-radius: 8px;
       padding: 10px;
-      margin-bottom: 8px;
-      text-align: center;
-      cursor: pointer;
-      transition: all 0.2s;
-      font-size: 11px;
-    }
-
-    .helper-slot:hover {
-      background: rgba(102, 126, 234, 0.4);
-      transform: scale(1.03);
-    }
-
-    .helper-sprite {
-      width: 60px;
-      height: 60px;
-      margin: 0 auto 5px;
-      background: rgba(0, 0, 0, 0.3);
-      border: 1px solid #667eea;
-      border-radius: 4px;
-    }
-
-    .helper-name {
-      font-weight: bold;
-      color: #00ff00;
-    }
-
-    /* Action Buttons */
-    #actionButtons {
-      position: absolute;
-      bottom: 20px;
-      left: 50%;
-      transform: translateX(-50%);
-      display: flex;
-      gap: 10px;
-      pointer-events: auto;
       z-index: 20;
+      pointer-events: none;
     }
 
-    .action-btn {
-      padding: 12px 20px;
-      background: linear-gradient(135deg, #667eea, #764ba2);
-      color: white;
-      border: 2px solid #ffaa00;
-      border-radius: 8px;
-      font-weight: bold;
-      font-size: 13px;
-      cursor: pointer;
-      transition: all 0.2s;
-      min-width: 110px;
+    .team-member-badge {
+      width: 50px;
+      height: 50px;
+      background: rgba(102, 126, 234, 0.2);
+      border: 2px solid #667eea;
+      border-radius: 4px;
+      display: inline-block;
+      margin: 3px;
+      text-align: center;
+      font-size: 24px;
     }
 
-    .action-btn:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
-    }
-
-    .action-btn:active {
-      transform: translateY(-1px);
-    }
-
-    .action-btn.disabled {
-      opacity: 0.4;
-      cursor: not-allowed;
-      transform: none;
-    }
-
-    /* Modals */
+    /* Battle/Encounter Modal */
     .modal {
       display: none;
       position: fixed;
@@ -285,7 +179,7 @@
 
     .modal-content h2 {
       color: #ffaa00;
-      font-size: 32px;
+      font-size: 28px;
       margin-bottom: 20px;
     }
 
@@ -306,6 +200,54 @@
     .modal-btn:hover {
       transform: translateY(-2px);
       box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+    }
+
+    .notification {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      background: rgba(0, 0, 0, 0.95);
+      color: #00ff00;
+      padding: 12px 20px;
+      border: 2px solid #00ff00;
+      border-radius: 8px;
+      font-weight: bold;
+      animation: slideIn 0.3s ease-out;
+      z-index: 150;
+      pointer-events: none;
+      font-size: 13px;
+    }
+
+    @keyframes slideIn {
+      from { transform: translateX(-400px); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+
+    #advButton {
+      position: absolute;
+      bottom: 20px;
+      right: 20px;
+      padding: 12px 25px;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      border: 2px solid #ffaa00;
+      border-radius: 8px;
+      font-weight: bold;
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.2s;
+      z-index: 20;
+      pointer-events: auto;
+    }
+
+    #advButton:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+    }
+
+    #advButton:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
     }
 
     .starter-grid {
@@ -331,56 +273,6 @@
       background: rgba(102, 126, 234, 0.6);
       transform: scale(1.05);
     }
-
-    .starter-sprite {
-      width: 100px;
-      height: 100px;
-      margin: 0 auto 10px;
-      background: rgba(0, 0, 0, 0.3);
-      border: 2px solid #667eea;
-      border-radius: 8px;
-    }
-
-    /* Notifications */
-    .notification {
-      position: absolute;
-      top: 20px;
-      right: 20px;
-      background: rgba(0, 0, 0, 0.95);
-      color: #00ff00;
-      padding: 12px 20px;
-      border: 2px solid #00ff00;
-      border-radius: 8px;
-      font-weight: bold;
-      animation: slideIn 0.3s ease-out;
-      z-index: 150;
-      pointer-events: none;
-      font-size: 13px;
-    }
-
-    @keyframes slideIn {
-      from { transform: translateX(400px); opacity: 0; }
-      to { transform: translateX(0); opacity: 1; }
-    }
-
-    /* Scrollbar */
-    ::-webkit-scrollbar {
-      width: 8px;
-    }
-
-    ::-webkit-scrollbar-track {
-      background: rgba(100, 100, 100, 0.2);
-      border-radius: 10px;
-    }
-
-    ::-webkit-scrollbar-thumb {
-      background: #667eea;
-      border-radius: 10px;
-    }
-
-    ::-webkit-scrollbar-thumb:hover {
-      background: #764ba2;
-    }
   </style>
 </head>
 <body>
@@ -388,64 +280,48 @@
     <div id="gameArea">
       <canvas id="canvas"></canvas>
       <div id="houseUI">
-        <div id="taskPanel">
-          <h3>📋 Tasks</h3>
-          <div id="tasksList"></div>
+        <div id="teamHUD">
+          <strong style="color: #ffaa00;">👥 Team</strong>
+          <div id="teamList"></div>
         </div>
 
-        <div id="helperPanel">
-          <h3>🦸 Team</h3>
-          <div id="helpersList"></div>
+        <div id="controlHints">
+          <div>⬆️⬇️⬅️➡️ Move | SPACE Jump</div>
+          <div>🎮 WASD Alternative | ESC Menu</div>
+          <div>📊 Stats at bottom | 🦸 Your team listed</div>
         </div>
 
-        <div id="actionButtons">
-          <button class="action-btn" onclick="game.work()">🔨 Work</button>
-          <button class="action-btn" onclick="game.rest()">😴 Rest</button>
-          <button class="action-btn" onclick="game.togglePokedex()">📖 Pokédex</button>
-          <button class="action-btn" onclick="game.togglePause()">⏸️ Pause</button>
-        </div>
+        <button id="advButton" onclick="game.startAdventure()">⚔️ Start Adventure!</button>
       </div>
     </div>
 
     <div id="statusBar">
       <div class="status-item">
-        <div class="status-label">ENERGY</div>
-        <div class="progress-bar">
-          <div class="progress-fill" id="energyBar" style="width: 100%;"></div>
-        </div>
-        <div class="status-value" id="energyValue">100/100</div>
+        <div class="status-label">LEVEL</div>
+        <div class="status-value" id="levelValue">1</div>
       </div>
 
       <div class="status-item">
-        <div class="status-label">HOUSE</div>
+        <div class="status-label">HEALTH</div>
         <div class="progress-bar">
-          <div class="progress-fill" id="progressBar" style="width: 0%;"></div>
+          <div class="progress-fill" id="healthBar" style="width: 100%;"></div>
         </div>
-        <div class="status-value" id="progressValue">0%</div>
+        <div class="status-value" id="healthValue">100/100</div>
       </div>
 
       <div class="status-item">
-        <div class="status-label">TEAM</div>
-        <div class="progress-bar">
-          <div class="progress-fill" id="teamBar" style="width: 0%;"></div>
-        </div>
-        <div class="status-value" id="teamValue">1/4</div>
+        <div class="status-label">LOCATION</div>
+        <div class="status-value" id="locationValue">Home</div>
       </div>
 
       <div class="status-item">
-        <div class="status-label">CAUGHT</div>
-        <div class="progress-bar">
-          <div class="progress-fill" id="caughtBar" style="width: 0%;"></div>
-        </div>
+        <div class="status-label">POKÉMON CAUGHT</div>
         <div class="status-value" id="caughtValue">1/16</div>
       </div>
 
       <div class="status-item">
-        <div class="status-label">DAY</div>
-        <div class="progress-bar">
-          <div class="progress-fill" id="dayBar" style="width: 0%;"></div>
-        </div>
-        <div class="status-value" id="dayValue">1</div>
+        <div class="status-label">PLAY TIME</div>
+        <div class="status-value" id="playtimeValue">0h</div>
       </div>
     </div>
   </div>
@@ -453,60 +329,41 @@
   <!-- Starter Modal -->
   <div id="starterModal" class="modal active">
     <div class="modal-content">
-      <h2>Choose Your Helper!</h2>
-      <p style="margin-bottom: 25px; color: #aaa;">Pick a Pokémon to help renovate</p>
+      <h2>Choose Your Companion!</h2>
+      <p style="margin-bottom: 25px; color: #aaa;">Pick a Pokémon for your 3D adventure</p>
       <div class="starter-grid">
         <div class="starter-option" onclick="game.selectStarter('4')">
-          <div class="starter-sprite" id="sprite-4"></div>
+          <div style="font-size: 60px; margin-bottom: 10px;">🔥</div>
           <div>Charmander</div>
         </div>
         <div class="starter-option" onclick="game.selectStarter('7')">
-          <div class="starter-sprite" id="sprite-7"></div>
+          <div style="font-size: 60px; margin-bottom: 10px;">💧</div>
           <div>Squirtle</div>
         </div>
         <div class="starter-option" onclick="game.selectStarter('1')">
-          <div class="starter-sprite" id="sprite-1"></div>
+          <div style="font-size: 60px; margin-bottom: 10px;">🌿</div>
           <div>Bulbasaur</div>
         </div>
         <div class="starter-option" onclick="game.selectStarter('25')">
-          <div class="starter-sprite" id="sprite-25"></div>
+          <div style="font-size: 60px; margin-bottom: 10px;">⚡</div>
           <div>Pikachu</div>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- Pokedex Modal -->
-  <div id="pokedexModal" class="modal">
-    <div class="modal-content">
-      <h2>📖 Pokédex</h2>
-      <div id="pokedexList" style="text-align: left; margin: 20px 0; max-height: 400px; overflow-y: auto; display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px;"></div>
-      <button class="modal-btn" onclick="game.togglePokedex()">Close</button>
-    </div>
-  </div>
-
-  <!-- Pause Modal -->
-  <div id="pauseModal" class="modal">
-    <div class="modal-content">
-      <h2>⏸️ PAUSED</h2>
-      <button class="modal-btn" onclick="game.togglePause()">Resume</button>
-      <button class="modal-btn" onclick="game.saveGame()">Save Game</button>
-      <button class="modal-btn" onclick="game.mainMenu()">Main Menu</button>
-    </div>
-  </div>
-
   <!-- Battle Modal -->
   <div id="battleModal" class="modal">
-    <div class="modal-content" style="max-width: 500px;">
+    <div class="modal-content">
       <h2 id="battleTitle">Wild Pokémon Appeared!</h2>
-      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin: 30px 0;">
-        <div style="text-align: center;">
-          <div id="playerSpriteContainer" style="width: 120px; height: 120px; margin: 0 auto 10px; background: rgba(102, 126, 234, 0.2); border: 2px solid #667eea; border-radius: 8px;"></div>
-          <div id="playerNameBattle" style="color: #00ff00; font-weight: bold;">Your Pokémon</div>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin: 30px 0; font-size: 48px;">
+        <div>
+          <div id="playerEmoji">🔥</div>
+          <div id="playerName" style="color: #00ff00; font-size: 14px; margin-top: 10px;"></div>
         </div>
-        <div style="text-align: center;">
-          <div id="enemySpriteContainer" style="width: 120px; height: 120px; margin: 0 auto 10px; background: rgba(255, 100, 100, 0.2); border: 2px solid #ff6464; border-radius: 8px;"></div>
-          <div id="enemyNameBattle" style="color: #ff6464; font-weight: bold;">Wild Pokémon</div>
+        <div>
+          <div id="enemyEmoji">❓</div>
+          <div id="enemyName" style="color: #ff6464; font-size: 14px; margin-top: 10px;"></div>
         </div>
       </div>
       <div style="margin: 20px 0;">
@@ -517,464 +374,401 @@
     </div>
   </div>
 
-  <!-- Completion Modal -->
-  <div id="completionModal" class="modal">
+  <!-- Menu Modal -->
+  <div id="menuModal" class="modal">
     <div class="modal-content">
-      <h2>🎉 HOUSE COMPLETE!</h2>
-      <p style="color: #aaa; font-size: 18px; margin: 20px 0;">You've restored the house to its former glory!</p>
-      <p style="color: #ffaa00; font-size: 14px; margin: 20px 0;">
-        Pokémon gathered: <strong id="finalCount">0</strong>/16
-      </p>
-      <button class="modal-btn" onclick="game.mainMenu()">Play Again</button>
+      <h2>⏸️ MENU</h2>
+      <button class="modal-btn" onclick="game.toggleMenu()">Resume</button>
+      <button class="modal-btn" onclick="game.saveGame()">Save Game</button>
+      <button class="modal-btn" onclick="game.returnHome()">Return Home</button>
+      <button class="modal-btn" onclick="game.mainMenu()">Main Menu</button>
     </div>
   </div>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script>
     const POKEMON_DATA = {
-      '1': { name: 'Bulbasaur', color: '#7ec74f' },
-      '4': { name: 'Charmander', color: '#f08030' },
-      '7': { name: 'Squirtle', color: '#78c8f0' },
-      '25': { name: 'Pikachu', color: '#f8d030' },
-      '35': { name: 'Clefairy', color: '#f8aef8' },
-      '39': { name: 'Jigglypuff', color: '#f8aef8' },
-      '54': { name: 'Psyduck', color: '#f8f030' },
-      '58': { name: 'Growlithe', color: '#f08030' },
-      '63': { name: 'Abra', color: '#a890f0' },
-      '69': { name: 'Bellsprout', color: '#78c850' },
-      '74': { name: 'Geodude', color: '#c5b78c' },
-      '79': { name: 'Slowpoke', color: '#f08888' },
-      '84': { name: 'Doduo', color: '#b88860' },
-      '92': { name: 'Gastly', color: '#705898' },
-      '104': { name: 'Cubone', color: '#c5b78c' },
-      '133': { name: 'Eevee', color: '#c8a882' }
+      '1': { name: 'Bulbasaur', emoji: '🌿', color: 0x7ec74f },
+      '4': { name: 'Charmander', emoji: '🔥', color: 0xf08030 },
+      '7': { name: 'Squirtle', emoji: '💧', color: 0x78c8f0 },
+      '25': { name: 'Pikachu', emoji: '⚡', color: 0xf8d030 },
+      '35': { name: 'Clefairy', emoji: '🌟', color: 0xf8aef8 },
+      '39': { name: 'Jigglypuff', emoji: '🎀', color: 0xf8aef8 },
+      '54': { name: 'Psyduck', emoji: '🦆', color: 0xf8f030 },
+      '58': { name: 'Growlithe', emoji: '🐕', color: 0xf08030 },
+      '63': { name: 'Abra', emoji: '✨', color: 0xa890f0 },
+      '69': { name: 'Bellsprout', emoji: '🌱', color: 0x78c850 },
+      '74': { name: 'Geodude', emoji: '🪨', color: 0xc5b78c },
+      '79': { name: 'Slowpoke', emoji: '🐌', color: 0xf08888 },
+      '84': { name: 'Doduo', emoji: '🦅', color: 0xb88860 },
+      '92': { name: 'Gastly', emoji: '👻', color: 0x705898 },
+      '104': { name: 'Cubone', emoji: '🦴', color: 0xc5b78c },
+      '133': { name: 'Eevee', emoji: '🦊', color: 0xc8a882 }
     };
+
+    const LOCATIONS = [
+      { name: 'Grassland', color: 0x90ee90, enemies: ['1', '54', '69', '133'] },
+      { name: 'Volcano', color: 0xff6b6b, enemies: ['4', '58', '92'] },
+      { name: 'Ocean', color: 0x4da6ff, enemies: ['7', '79', '84'] },
+      { name: 'Sky Realm', color: 0x87ceeb, enemies: ['25', '35', '39', '63'] },
+      { name: 'Mountain', color: 0x8b7355, enemies: ['74', '104'] }
+    ];
 
     class Game {
       constructor() {
         this.canvas = document.getElementById('canvas');
-        this.ctx = this.canvas.getContext('2d');
-        this.resizeCanvas();
-        
+        this.scene = new THREE.Scene();
+        this.camera = new THREE.PerspectiveCamera(75, this.canvas.clientWidth / this.canvas.clientHeight, 0.1, 1000);
+        this.renderer = new THREE.WebGLRenderer({ canvas: this.canvas, antialias: true });
+        this.renderer.setSize(this.canvas.clientWidth, this.canvas.clientHeight);
+        this.renderer.shadowMap.enabled = true;
+
         this.state = {
           starter: null,
-          energy: 100,
-          maxEnergy: 100,
-          progress: 0,
-          maxProgress: 100,
-          day: 1,
           team: [],
           caught: {},
+          level: 1,
+          health: 100,
+          maxHealth: 100,
+          currentLocation: 0,
+          inAdventure: false,
           isPaused: false,
-          gameStarted: false,
-          houseComplete: false,
-          currentTask: 0,
-          tasks: [
-            { name: 'Clean Floors', progress: 0, max: 20 },
-            { name: 'Fix Walls', progress: 0, max: 20 },
-            { name: 'Repair Roof', progress: 0, max: 20 },
-            { name: 'Paint Interior', progress: 0, max: 20 },
-            { name: 'Restore Garden', progress: 0, max: 20 }
-          ]
+          playTime: 0
         };
 
-        this.spriteCache = {};
+        this.player = null;
+        this.companion = null;
+        this.enemies = [];
+        this.projectiles = [];
         this.particles = [];
-        this.houseLevel = 0;
-        
-        this.loadGame();
-        this.initSpriteRendering();
-        this.animate();
+        this.keys = {};
+        this.camera.position.set(0, 5, 8);
+        this.camera.lookAt(0, 1, 0);
+
+        this.setupLights();
+        this.setupGround();
         this.setupEventListeners();
+        this.loadGame();
+        this.animate();
+
+        this.startTime = Date.now();
       }
 
-      resizeCanvas() {
-        this.canvas.width = this.canvas.offsetWidth;
-        this.canvas.height = this.canvas.offsetHeight;
+      setupLights() {
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.7);
+        this.scene.add(ambientLight);
+
+        const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+        directionalLight.position.set(10, 15, 10);
+        directionalLight.castShadow = true;
+        directionalLight.shadow.mapSize.width = 2048;
+        directionalLight.shadow.mapSize.height = 2048;
+        this.scene.add(directionalLight);
       }
 
-      initSpriteRendering() {
-        // Pre-generate placeholder sprites using canvas
-        this.generateSprite = (pokemonId) => {
-          const color = POKEMON_DATA[pokemonId]?.color || '#888888';
-          const canvas = document.createElement('canvas');
-          canvas.width = 80;
-          canvas.height = 80;
-          const ctx = canvas.getContext('2d');
-          
-          // Draw simple Pokémon shape
-          ctx.fillStyle = color;
-          ctx.beginPath();
-          ctx.arc(40, 30, 20, 0, Math.PI * 2);
-          ctx.fill();
-          ctx.fillRect(25, 45, 30, 25);
-          ctx.beginPath();
-          ctx.arc(30, 45, 8, 0, Math.PI * 2);
-          ctx.fill();
-          ctx.beginPath();
-          ctx.arc(50, 45, 8, 0, Math.PI * 2);
-          ctx.fill();
-          
-          return canvas;
-        };
+      setupGround() {
+        const groundGeom = new THREE.PlaneGeometry(200, 200);
+        const groundMat = new THREE.MeshStandardMaterial({ color: 0x90ee90 });
+        const ground = new THREE.Mesh(groundGeom, groundMat);
+        ground.rotation.x = -Math.PI / 2;
+        ground.receiveShadow = true;
+        this.scene.add(ground);
       }
 
-      setupEventListeners() {
-        window.addEventListener('resize', () => this.resizeCanvas());
-        window.addEventListener('keydown', (e) => {
-          if (e.key === ' ') this.work();
-          if (e.key === 'r' || e.key === 'R') this.rest();
-          if (e.key === 'Escape') this.togglePause();
-        });
+      createCharacter(pokemonId) {
+        const group = new THREE.Group();
+        const poke = POKEMON_DATA[pokemonId];
+
+        // Body
+        const bodyGeom = new THREE.SphereGeometry(0.6, 32, 32);
+        const bodyMat = new THREE.MeshStandardMaterial({ color: poke.color });
+        const body = new THREE.Mesh(bodyGeom, bodyMat);
+        body.position.y = 0.8;
+        body.castShadow = true;
+        group.add(body);
+
+        // Head
+        const headGeom = new THREE.SphereGeometry(0.4, 32, 32);
+        const head = new THREE.Mesh(headGeom, bodyMat);
+        head.position.y = 1.4;
+        head.castShadow = true;
+        group.add(head);
+
+        // Eyes
+        const eyeGeom = new THREE.SphereGeometry(0.08, 16, 16);
+        const eyeMat = new THREE.MeshStandardMaterial({ color: 0x000000 });
+        const eye1 = new THREE.Mesh(eyeGeom, eyeMat);
+        eye1.position.set(-0.15, 1.55, 0.35);
+        group.add(eye1);
+        const eye2 = new THREE.Mesh(eyeGeom, eyeMat);
+        eye2.position.set(0.15, 1.55, 0.35);
+        group.add(eye2);
+
+        // Legs
+        const legGeom = new THREE.BoxGeometry(0.2, 0.5, 0.2);
+        for (let i = 0; i < 4; i++) {
+          const leg = new THREE.Mesh(legGeom, bodyMat);
+          const offsetX = (i < 2 ? -1 : 1) * 0.25;
+          const offsetZ = (i % 2 === 0 ? -1 : 1) * 0.25;
+          leg.position.set(offsetX, 0.25, offsetZ);
+          leg.castShadow = true;
+          group.add(leg);
+        }
+
+        // Label
+        const canvas = document.createElement('canvas');
+        canvas.width = 256;
+        canvas.height = 128;
+        const ctx = canvas.getContext('2d');
+        ctx.fillStyle = '#fff';
+        ctx.font = 'bold 48px Arial';
+        ctx.textAlign = 'center';
+        ctx.fillText(poke.name, 128, 80);
+        
+        const texture = new THREE.CanvasTexture(canvas);
+        const spriteMat = new THREE.MeshBasicMaterial({ map: texture });
+        const spriteGeom = new THREE.PlaneGeometry(2, 1);
+        const sprite = new THREE.Mesh(spriteGeom, spriteMat);
+        sprite.position.y = 2.2;
+        sprite.position.z = 0.1;
+        group.add(sprite);
+
+        return group;
       }
 
       selectStarter(pokemonId) {
         this.state.starter = pokemonId;
         this.state.team.push(pokemonId);
         this.state.caught[pokemonId] = POKEMON_DATA[pokemonId];
-        this.state.gameStarted = true;
         document.getElementById('starterModal').classList.remove('active');
         this.updateUI();
-        this.loadGame(); // Auto-save
+        this.loadGame();
       }
 
-      work() {
-        if (!this.state.gameStarted || this.state.isPaused || this.state.houseComplete) return;
-        if (this.state.energy < 10) {
-          this.notify('⚠️ Too tired! Rest first.');
+      startAdventure() {
+        if (!this.state.starter) {
+          this.notify('⚠️ Choose a starter first!');
           return;
         }
 
-        this.state.energy -= 10;
-        const task = this.state.tasks[this.state.currentTask];
-        const workAmount = 3 + this.state.team.length;
-        task.progress += workAmount;
+        this.state.inAdventure = true;
+        this.state.currentLocation = Math.floor(Math.random() * LOCATIONS.length);
+        
+        // Clear scene
+        this.scene.children = this.scene.children.filter(c => c !== this.scene.background);
 
-        // Particle effect
-        this.createParticles(this.canvas.width / 2, this.canvas.height / 2, 8);
+        // Recreate lights and ground for new location
+        this.setupLights();
+        const location = LOCATIONS[this.state.currentLocation];
+        this.scene.background = new THREE.Color(location.color);
+        this.setupGround();
 
-        if (task.progress >= task.max) {
-          task.progress = task.max;
-          this.state.progress += 20;
-          this.notify(`✓ ${task.name} Complete!`);
-          
-          if (this.state.progress >= 100) {
-            this.completeHouse();
-          } else {
-            this.state.currentTask = this.state.tasks.findIndex(t => t.progress < t.max);
+        // Create player character
+        if (this.player) this.scene.remove(this.player);
+        this.player = this.createCharacter(this.state.starter);
+        this.player.position.set(0, 0, 0);
+        this.scene.add(this.player);
+
+        // Spawn enemies
+        this.enemies = [];
+        for (let i = 0; i < 3; i++) {
+          const enemyId = location.enemies[Math.floor(Math.random() * location.enemies.length)];
+          const enemy = this.createCharacter(enemyId);
+          enemy.position.set(Math.random() * 20 - 10, 0, Math.random() * 20 - 10);
+          enemy.pokemonId = enemyId;
+          this.scene.add(enemy);
+          this.enemies.push(enemy);
+        }
+
+        document.getElementById('advButton').disabled = true;
+        this.updateUI();
+      }
+
+      updatePlayerMovement() {
+        const speed = 0.1;
+        if (this.keys['ArrowUp'] || this.keys['w'] || this.keys['W']) {
+          this.player.position.z -= speed;
+        }
+        if (this.keys['ArrowDown'] || this.keys['s'] || this.keys['S']) {
+          this.player.position.z += speed;
+        }
+        if (this.keys['ArrowLeft'] || this.keys['a'] || this.keys['A']) {
+          this.player.position.x -= speed;
+        }
+        if (this.keys['ArrowRight'] || this.keys['d'] || this.keys['D']) {
+          this.player.position.x += speed;
+        }
+      }
+
+      updateEnemyAI() {
+        this.enemies.forEach(enemy => {
+          // Move towards player
+          const dx = this.player.position.x - enemy.position.x;
+          const dz = this.player.position.z - enemy.position.z;
+          const dist = Math.sqrt(dx * dx + dz * dz);
+
+          if (dist > 2) {
+            const speed = 0.02;
+            enemy.position.x += (dx / dist) * speed;
+            enemy.position.z += (dz / dist) * speed;
+          } else if (dist < 2 && Math.random() < 0.02) {
+            // Trigger battle
+            this.triggerBattle(enemy);
           }
-        }
-
-        this.updateUI();
-        this.saveGame();
+        });
       }
 
-      rest() {
-        if (!this.state.gameStarted || this.state.isPaused || this.state.houseComplete) return;
-        this.state.energy = this.state.maxEnergy;
-        this.state.day++;
-        
-        // Random encounter
-        if (Math.random() > 0.3) {
-          this.startBattle();
-        } else {
-          this.notify('😴 Rested... New day!');
-        }
-        
-        this.updateUI();
-        this.saveGame();
-      }
+      triggerBattle(enemy) {
+        const enemyId = enemy.pokemonId;
+        const enemyData = POKEMON_DATA[enemyId];
 
-      startBattle() {
-        const wildPokemonIds = Object.keys(POKEMON_DATA).filter(id => id !== this.state.starter);
-        const wildId = wildPokemonIds[Math.floor(Math.random() * wildPokemonIds.length)];
-        
-        this.currentBattle = {
-          playerId: this.state.starter,
-          enemyId: wildId
-        };
+        document.getElementById('battleTitle').textContent = `${enemyData.name} appeared!`;
+        document.getElementById('playerEmoji').textContent = POKEMON_DATA[this.state.starter].emoji;
+        document.getElementById('playerName').textContent = POKEMON_DATA[this.state.starter].name;
+        document.getElementById('enemyEmoji').textContent = enemyData.emoji;
+        document.getElementById('enemyName').textContent = enemyData.name;
 
-        document.getElementById('playerNameBattle').textContent = POKEMON_DATA[this.state.starter].name;
-        document.getElementById('enemyNameBattle').textContent = POKEMON_DATA[wildId].name;
-        
-        const playerContainer = document.getElementById('playerSpriteContainer');
-        const enemyContainer = document.getElementById('enemySpriteContainer');
-        playerContainer.innerHTML = '';
-        enemyContainer.innerHTML = '';
-        
-        const playerSprite = this.generateSprite(this.state.starter);
-        const enemySprite = this.generateSprite(wildId);
-        playerContainer.appendChild(playerSprite);
-        enemyContainer.appendChild(enemySprite);
-
+        this.currentBattle = { enemyId, enemyObj: enemy };
         document.getElementById('battleModal').classList.add('active');
+        this.state.isPaused = true;
       }
 
       catchPokemon() {
-        const wildId = this.currentBattle.enemyId;
-        if (!this.state.caught[wildId]) {
-          this.state.caught[wildId] = POKEMON_DATA[wildId];
-          this.notify(`✓ Caught ${POKEMON_DATA[wildId].name}!`);
+        const { enemyId, enemyObj } = this.currentBattle;
+        if (!this.state.caught[enemyId]) {
+          this.state.caught[enemyId] = POKEMON_DATA[enemyId];
+          this.notify(`✓ Caught ${POKEMON_DATA[enemyId].name}!`);
         }
+        this.scene.remove(enemyObj);
+        this.enemies = this.enemies.filter(e => e !== enemyObj);
         document.getElementById('battleModal').classList.remove('active');
-        this.saveGame();
+        this.state.isPaused = false;
         this.updateUI();
+        this.saveGame();
       }
 
       battleWin() {
-        const wildId = this.currentBattle.enemyId;
-        this.state.energy = Math.max(0, this.state.energy - 20);
-        
-        if (!this.state.caught[wildId]) {
-          this.state.caught[wildId] = POKEMON_DATA[wildId];
-          this.notify(`⚡ Won & Caught ${POKEMON_DATA[wildId].name}!`);
-        } else {
-          this.notify('⚡ Battle Won! (Already had this Pokémon)');
+        this.state.level = Math.floor(Object.keys(this.state.caught).length / 2) + 1;
+        const { enemyId, enemyObj } = this.currentBattle;
+        if (!this.state.caught[enemyId]) {
+          this.state.caught[enemyId] = POKEMON_DATA[enemyId];
         }
-        
+        this.scene.remove(enemyObj);
+        this.enemies = this.enemies.filter(e => e !== enemyObj);
+        this.notify(`⚡ Won! Pokémon caught: ${Object.keys(this.state.caught).length}/16`);
         document.getElementById('battleModal').classList.remove('active');
-        this.saveGame();
+        this.state.isPaused = false;
         this.updateUI();
+        this.saveGame();
       }
 
       runAway() {
         this.notify('🏃 Ran away safely!');
         document.getElementById('battleModal').classList.remove('active');
+        this.state.isPaused = false;
       }
 
-      completeHouse() {
-        this.state.houseComplete = true;
-        document.getElementById('finalCount').textContent = Object.keys(this.state.caught).length;
-        document.getElementById('completionModal').classList.add('active');
-        this.saveGame();
-      }
-
-      togglePause() {
-        if (!this.state.gameStarted) return;
+      toggleMenu() {
         this.state.isPaused = !this.state.isPaused;
-        document.getElementById('pauseModal').classList.toggle('active');
+        document.getElementById('menuModal').classList.toggle('active');
       }
 
-      togglePokedex() {
-        const modal = document.getElementById('pokedexModal');
-        modal.classList.toggle('active');
-        
-        if (modal.classList.contains('active')) {
-          this.populatePokedex();
-        }
-      }
-
-      populatePokedex() {
-        const list = document.getElementById('pokedexList');
-        list.innerHTML = '';
-        
-        Object.entries(this.state.caught).forEach(([id, poke]) => {
-          const div = document.createElement('div');
-          div.style.cssText = 'padding: 12px; background: rgba(102, 126, 234, 0.2); border: 2px solid #667eea; border-radius: 8px; text-align: center;';
-          
-          const sprite = this.generateSprite(id);
-          div.appendChild(sprite);
-          
-          const label = document.createElement('div');
-          label.style.cssText = 'font-weight: bold; color: #00ff00; font-size: 12px; margin-top: 5px;';
-          label.textContent = poke.name;
-          div.appendChild(label);
-          
-          list.appendChild(div);
-        });
-      }
-
-      populateTeam() {
-        const list = document.getElementById('helpersList');
-        list.innerHTML = '';
-        
-        this.state.team.forEach(pokemonId => {
-          const poke = POKEMON_DATA[pokemonId];
-          const div = document.createElement('div');
-          div.className = 'helper-slot';
-          
-          const sprite = this.generateSprite(pokemonId);
-          div.appendChild(sprite);
-          
-          const name = document.createElement('div');
-          name.className = 'helper-name';
-          name.textContent = poke.name;
-          div.appendChild(name);
-          
-          list.appendChild(div);
-        });
-      }
-
-      populateTasks() {
-        const list = document.getElementById('tasksList');
-        list.innerHTML = '';
-        
-        this.state.tasks.forEach((task, idx) => {
-          const percent = Math.round((task.progress / task.max) * 100);
-          const div = document.createElement('div');
-          div.className = `task-item ${this.state.currentTask === idx ? 'active' : ''}`;
-          div.style.cursor = 'pointer';
-          div.onclick = () => this.state.currentTask = idx;
-          
-          div.innerHTML = `
-            <div class="task-name">${task.name}</div>
-            <div class="task-progress">${task.progress}/${task.max}</div>
-            <div class="progress-bar" style="height: 8px;">
-              <div class="progress-fill" style="width: ${percent}%;"></div>
-            </div>
-          `;
-          list.appendChild(div);
-        });
-      }
-
-      updateUI() {
-        // Energy
-        document.getElementById('energyValue').textContent = `${this.state.energy}/${this.state.maxEnergy}`;
-        document.getElementById('energyBar').style.width = (this.state.energy / this.state.maxEnergy) * 100 + '%';
-
-        // Progress
-        document.getElementById('progressValue').textContent = `${this.state.progress}%`;
-        document.getElementById('progressBar').style.width = this.state.progress + '%';
-
-        // Team
-        document.getElementById('teamValue').textContent = `${this.state.team.length}/4`;
-        document.getElementById('teamBar').style.width = (this.state.team.length / 4) * 100 + '%';
-
-        // Caught
-        const caughtCount = Object.keys(this.state.caught).length;
-        document.getElementById('caughtValue').textContent = `${caughtCount}/16`;
-        document.getElementById('caughtBar').style.width = (caughtCount / 16) * 100 + '%';
-
-        // Day
-        document.getElementById('dayValue').textContent = this.state.day;
-        document.getElementById('dayBar').style.width = Math.min((this.state.day / 20) * 100, 100) + '%';
-
-        // Tasks & Team
-        this.populateTasks();
-        this.populateTeam();
-
-        // Work button
-        document.getElementById('actionButtons').children[0].classList.toggle('disabled', this.state.energy < 10);
-      }
-
-      createParticles(x, y, count) {
-        for (let i = 0; i < count; i++) {
-          this.particles.push({
-            x: x,
-            y: y,
-            vx: (Math.random() - 0.5) * 8,
-            vy: (Math.random() - 0.5) * 8 - 2,
-            life: 30,
-            text: '+' + (3 + this.state.team.length)
-          });
-        }
-      }
-
-      drawParticles() {
-        this.particles = this.particles.filter(p => p.life > 0);
-        this.particles.forEach(p => {
-          p.x += p.vx;
-          p.y += p.vy;
-          p.vy += 0.2; // gravity
-          p.life--;
-
-          this.ctx.fillStyle = `rgba(102, 200, 100, ${p.life / 30})`;
-          this.ctx.font = 'bold 16px Arial';
-          this.ctx.fillText(p.text, p.x, p.y);
-        });
-      }
-
-      drawHouse() {
-        const progress = this.state.progress / 100;
-        const cx = this.canvas.width / 2;
-        const cy = this.canvas.height / 2;
-
-        // Draw house shape
-        const size = 150 + progress * 50;
-        
-        // Walls
-        this.ctx.fillStyle = `rgb(${100 + progress * 100}, ${80 + progress * 100}, ${60 + progress * 100})`;
-        this.ctx.fillRect(cx - size / 2, cy - size / 3, size, size / 2);
-
-        // Roof
-        this.ctx.fillStyle = `rgb(${150 + progress * 50}, ${100 + progress * 30}, ${80 + progress * 30})`;
-        this.ctx.beginPath();
-        this.ctx.moveTo(cx - size / 2, cy - size / 3);
-        this.ctx.lineTo(cx, cy - size / 3 - size / 3);
-        this.ctx.lineTo(cx + size / 2, cy - size / 3);
-        this.ctx.fill();
-
-        // Door
-        const doorWidth = 30 + progress * 20;
-        const doorHeight = 60 + progress * 30;
-        this.ctx.fillStyle = `rgb(${80 + progress * 80}, ${50 + progress * 70}, 30)`;
-        this.ctx.fillRect(cx - doorWidth / 2, cy, doorWidth, doorHeight);
-
-        // Windows
-        const windowSize = 20 + progress * 15;
-        this.ctx.fillStyle = `rgb(${150 + progress * 100}, ${200 + progress * 50}, 255)`;
-        this.ctx.fillRect(cx - size / 3 - windowSize / 2, cy - size / 6, windowSize, windowSize);
-        this.ctx.fillRect(cx + size / 3 - windowSize / 2, cy - size / 6, windowSize, windowSize);
-
-        // Progress text
-        this.ctx.fillStyle = '#ffaa00';
-        this.ctx.font = 'bold 24px Arial';
-        this.ctx.textAlign = 'center';
-        this.ctx.fillText(`${this.state.progress}%`, cx, cy + size / 2 + 40);
-      }
-
-      animate() {
-        this.ctx.fillStyle = 'rgba(135, 206, 235, 0.5)';
-        this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
-
-        if (this.state.gameStarted && !this.state.isPaused) {
-          this.drawHouse();
-          this.drawParticles();
-        }
-
-        requestAnimationFrame(() => this.animate());
-      }
-
-      saveGame() {
-        localStorage.setItem('pokemonHouseGame', JSON.stringify(this.state));
-      }
-
-      loadGame() {
-        const saved = localStorage.getItem('pokemonHouseGame');
-        if (saved) {
-          this.state = JSON.parse(saved);
-          if (this.state.gameStarted) {
-            document.getElementById('starterModal').classList.remove('active');
-            this.updateUI();
-          }
-        }
+      returnHome() {
+        this.state.inAdventure = false;
+        this.state.isPaused = false;
+        this.enemies = [];
+        document.getElementById('menuModal').classList.remove('active');
+        document.getElementById('advButton').disabled = false;
+        this.scene.children = [];
+        this.setupLights();
+        this.setupGround();
+        this.updateUI();
       }
 
       mainMenu() {
         this.state = {
           starter: null,
-          energy: 100,
-          maxEnergy: 100,
-          progress: 0,
-          maxProgress: 100,
-          day: 1,
           team: [],
           caught: {},
+          level: 1,
+          health: 100,
+          maxHealth: 100,
+          currentLocation: 0,
+          inAdventure: false,
           isPaused: false,
-          gameStarted: false,
-          houseComplete: false,
-          currentTask: 0,
-          tasks: [
-            { name: 'Clean Floors', progress: 0, max: 20 },
-            { name: 'Fix Walls', progress: 0, max: 20 },
-            { name: 'Repair Roof', progress: 0, max: 20 },
-            { name: 'Paint Interior', progress: 0, max: 20 },
-            { name: 'Restore Garden', progress: 0, max: 20 }
-          ]
+          playTime: 0
         };
         document.getElementById('starterModal').classList.add('active');
-        document.getElementById('completionModal').classList.remove('active');
-        document.getElementById('pauseModal').classList.remove('active');
+        document.getElementById('menuModal').classList.remove('active');
+        this.returnHome();
         this.saveGame();
+      }
+
+      updateUI() {
+        document.getElementById('levelValue').textContent = this.state.level;
+        document.getElementById('healthValue').textContent = `${this.state.health}/${this.state.maxHealth}`;
+        document.getElementById('healthBar').style.width = (this.state.health / this.state.maxHealth) * 100 + '%';
+        document.getElementById('locationValue').textContent = this.state.inAdventure ? LOCATIONS[this.state.currentLocation].name : 'Home';
+        document.getElementById('caughtValue').textContent = `${Object.keys(this.state.caught).length}/16`;
+
+        const hours = Math.floor(this.state.playTime / 3600);
+        document.getElementById('playtimeValue').textContent = `${hours}h`;
+
+        const teamList = document.getElementById('teamList');
+        teamList.innerHTML = '';
+        this.state.team.forEach(pokemonId => {
+          const badge = document.createElement('span');
+          badge.className = 'team-member-badge';
+          badge.textContent = POKEMON_DATA[pokemonId].emoji;
+          teamList.appendChild(badge);
+        });
+      }
+
+      setupEventListeners() {
+        window.addEventListener('keydown', (e) => {
+          this.keys[e.key] = true;
+          if (e.key === 'Escape') this.toggleMenu();
+        });
+        window.addEventListener('keyup', (e) => {
+          this.keys[e.key] = false;
+        });
+        window.addEventListener('resize', () => {
+          this.camera.aspect = this.canvas.clientWidth / this.canvas.clientHeight;
+          this.camera.updateProjectionMatrix();
+          this.renderer.setSize(this.canvas.clientWidth, this.canvas.clientHeight);
+        });
+      }
+
+      animate() {
+        requestAnimationFrame(() => this.animate());
+
+        if (this.state.inAdventure && !this.state.isPaused && this.player) {
+          this.updatePlayerMovement();
+          this.updateEnemyAI();
+
+          // Camera follows player
+          this.camera.position.x = this.player.position.x;
+          this.camera.position.z = this.player.position.z + 8;
+          this.camera.lookAt(this.player.position.x, 1, this.player.position.z);
+        }
+
+        this.state.playTime = (Date.now() - this.startTime) / 1000;
+        this.renderer.render(this.scene, this.camera);
+      }
+
+      saveGame() {
+        localStorage.setItem('pokemonAdventureGame', JSON.stringify(this.state));
+      }
+
+      loadGame() {
+        const saved = localStorage.getItem('pokemonAdventureGame');
+        if (saved) {
+          this.state = JSON.parse(saved);
+          if (this.state.starter) {
+            document.getElementById('starterModal').classList.remove('active');
+          }
+        }
+        this.updateUI();
       }
 
       notify(text) {
@@ -987,8 +781,6 @@
     }
 
     const game = new Game();
-
-    // Expose global functions for onclick handlers
     window.game = game;
   </script>
 </body>
