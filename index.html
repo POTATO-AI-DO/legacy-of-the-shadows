@@ -16,6 +16,7 @@
       background: #0a0a0a;
       color: #fff;
       overflow: hidden;
+      user-select: none;
     }
 
     #gameContainer {
@@ -37,6 +38,8 @@
       width: 100%;
       height: 100%;
       display: block;
+      image-rendering: pixelated;
+      image-rendering: crisp-edges;
     }
 
     #houseUI {
@@ -49,43 +52,14 @@
       z-index: 10;
     }
 
-    /* House Display */
-    #houseDisplay {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      text-align: center;
-      pointer-events: none;
-    }
-
-    .house-sprite {
-      font-size: 200px;
-      margin-bottom: 20px;
-      filter: drop-shadow(5px 5px 10px rgba(0, 0, 0, 0.5));
-      animation: houseFloat 3s ease-in-out infinite;
-    }
-
-    @keyframes houseFloat {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-10px); }
-    }
-
-    .house-condition {
-      font-size: 24px;
-      font-weight: bold;
-      color: #ffaa00;
-      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
-    }
-
-    /* Status Bar */
     #statusBar {
-      background: rgba(0, 0, 0, 0.9);
-      padding: 20px;
+      background: rgba(0, 0, 0, 0.95);
+      padding: 15px 20px;
       border-top: 3px solid #ffaa00;
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 20px;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 15px;
+      box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.5);
     }
 
     .status-item {
@@ -93,31 +67,35 @@
     }
 
     .status-label {
-      font-size: 12px;
+      font-size: 11px;
       color: #aaa;
-      margin-bottom: 5px;
+      margin-bottom: 3px;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 1px;
     }
 
     .status-value {
-      font-size: 24px;
+      font-size: 18px;
       font-weight: bold;
       color: #ffaa00;
+      font-family: 'Courier New', monospace;
     }
 
     .progress-bar {
       width: 100%;
-      height: 20px;
-      background: rgba(100, 100, 100, 0.5);
-      border: 2px solid #667eea;
-      border-radius: 10px;
-      margin-top: 8px;
+      height: 12px;
+      background: rgba(100, 100, 100, 0.3);
+      border: 1px solid #667eea;
+      border-radius: 6px;
+      margin-top: 4px;
       overflow: hidden;
     }
 
     .progress-fill {
       height: 100%;
       background: linear-gradient(90deg, #667eea, #764ba2);
-      transition: width 0.3s ease;
+      transition: width 0.2s ease;
     }
 
     /* Task Panel */
@@ -125,110 +103,107 @@
       position: absolute;
       top: 20px;
       left: 20px;
-      background: rgba(0, 0, 0, 0.8);
+      background: rgba(0, 0, 0, 0.9);
       border: 3px solid #667eea;
       border-radius: 15px;
-      padding: 20px;
-      width: 350px;
+      padding: 15px;
+      width: 300px;
       pointer-events: auto;
-      max-height: 60vh;
+      max-height: 55vh;
       overflow-y: auto;
       z-index: 20;
+      backdrop-filter: blur(10px);
     }
 
     #taskPanel h3 {
       color: #ffaa00;
-      margin-bottom: 15px;
-      font-size: 20px;
+      margin-bottom: 12px;
+      font-size: 16px;
     }
 
     .task-item {
-      background: rgba(102, 126, 234, 0.3);
+      background: rgba(102, 126, 234, 0.2);
       border-left: 4px solid #667eea;
-      padding: 12px;
-      margin-bottom: 10px;
-      border-radius: 8px;
+      padding: 10px;
+      margin-bottom: 8px;
+      border-radius: 6px;
       cursor: pointer;
-      transition: all 0.3s;
+      transition: all 0.2s;
+      font-size: 12px;
     }
 
     .task-item:hover {
-      background: rgba(102, 126, 234, 0.6);
-      transform: translateX(5px);
+      background: rgba(102, 126, 234, 0.4);
+      transform: translateX(3px);
     }
 
     .task-item.active {
       border-left-color: #00ff00;
-      background: rgba(0, 150, 100, 0.4);
+      background: rgba(0, 150, 100, 0.3);
     }
 
     .task-item.completed {
       opacity: 0.5;
-      text-decoration: line-through;
+      color: #aaa;
     }
 
     .task-name {
       font-weight: bold;
-      color: #fff;
-      margin-bottom: 5px;
+      margin-bottom: 3px;
     }
 
-    .task-progress {
-      font-size: 12px;
-      color: #aaa;
-    }
-
-    /* Pokemon Helpers Panel */
+    /* Helper Panel */
     #helperPanel {
       position: absolute;
-      bottom: 100px;
+      bottom: 120px;
       right: 20px;
-      background: rgba(0, 0, 0, 0.8);
+      background: rgba(0, 0, 0, 0.9);
       border: 3px solid #ffaa00;
       border-radius: 15px;
-      padding: 20px;
-      width: 280px;
+      padding: 15px;
+      width: 250px;
       pointer-events: auto;
       z-index: 20;
+      backdrop-filter: blur(10px);
+      max-height: 40vh;
+      overflow-y: auto;
     }
 
     #helperPanel h3 {
       color: #ffaa00;
-      margin-bottom: 15px;
-      font-size: 18px;
+      margin-bottom: 10px;
+      font-size: 14px;
     }
 
     .helper-slot {
-      background: rgba(102, 126, 234, 0.3);
+      background: rgba(102, 126, 234, 0.2);
       border: 2px solid #667eea;
-      border-radius: 10px;
-      padding: 12px;
-      margin-bottom: 10px;
+      border-radius: 8px;
+      padding: 10px;
+      margin-bottom: 8px;
       text-align: center;
       cursor: pointer;
-      transition: all 0.3s;
+      transition: all 0.2s;
+      font-size: 11px;
     }
 
     .helper-slot:hover {
-      background: rgba(102, 126, 234, 0.6);
-      transform: scale(1.05);
+      background: rgba(102, 126, 234, 0.4);
+      transform: scale(1.03);
     }
 
     .helper-sprite {
-      font-size: 48px;
-      margin-bottom: 8px;
+      width: 60px;
+      height: 60px;
+      margin: 0 auto 5px;
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid #667eea;
+      border-radius: 4px;
     }
 
     .helper-name {
       font-weight: bold;
       color: #00ff00;
-      font-size: 14px;
-    }
-
-    .helper-bonus {
-      font-size: 11px;
-      color: #aaa;
-      margin-top: 5px;
     }
 
     /* Action Buttons */
@@ -238,39 +213,40 @@
       left: 50%;
       transform: translateX(-50%);
       display: flex;
-      gap: 20px;
+      gap: 10px;
       pointer-events: auto;
       z-index: 20;
     }
 
     .action-btn {
-      padding: 15px 30px;
+      padding: 12px 20px;
       background: linear-gradient(135deg, #667eea, #764ba2);
       color: white;
-      border: 3px solid #ffaa00;
-      border-radius: 12px;
+      border: 2px solid #ffaa00;
+      border-radius: 8px;
       font-weight: bold;
-      font-size: 16px;
+      font-size: 13px;
       cursor: pointer;
-      transition: all 0.3s;
-      min-width: 150px;
+      transition: all 0.2s;
+      min-width: 110px;
     }
 
     .action-btn:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 10px 25px rgba(102, 126, 234, 0.5);
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
     }
 
     .action-btn:active {
-      transform: translateY(-2px);
+      transform: translateY(-1px);
     }
 
     .action-btn.disabled {
-      opacity: 0.5;
+      opacity: 0.4;
       cursor: not-allowed;
+      transform: none;
     }
 
-    /* Menus */
+    /* Modals */
     .modal {
       display: none;
       position: fixed;
@@ -279,7 +255,7 @@
       width: 100%;
       height: 100%;
       background: rgba(0, 0, 0, 0.95);
-      z-index: 100;
+      z-index: 1000;
       align-items: center;
       justify-content: center;
       pointer-events: auto;
@@ -287,6 +263,12 @@
 
     .modal.active {
       display: flex;
+      animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
     }
 
     .modal-content {
@@ -309,39 +291,38 @@
 
     .modal-btn {
       width: 100%;
-      padding: 15px;
-      margin: 10px 0;
+      padding: 12px;
+      margin: 8px 0;
       background: linear-gradient(135deg, #667eea, #764ba2);
       color: white;
       border: 2px solid #ffaa00;
-      border-radius: 10px;
+      border-radius: 8px;
       font-weight: bold;
-      font-size: 16px;
+      font-size: 14px;
       cursor: pointer;
-      transition: all 0.3s;
+      transition: all 0.2s;
     }
 
     .modal-btn:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 10px 25px rgba(102, 126, 234, 0.5);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
     }
 
-    /* Starter Selection */
     .starter-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
-      gap: 20px;
+      gap: 15px;
       margin: 20px 0;
     }
 
     .starter-option {
-      padding: 25px;
+      padding: 20px;
       background: rgba(102, 126, 234, 0.3);
       border: 3px solid #667eea;
-      border-radius: 15px;
+      border-radius: 12px;
       color: white;
       font-weight: bold;
-      font-size: 18px;
+      font-size: 16px;
       cursor: pointer;
       transition: all 0.3s;
     }
@@ -352,8 +333,12 @@
     }
 
     .starter-sprite {
-      font-size: 80px;
-      margin-bottom: 10px;
+      width: 100px;
+      height: 100px;
+      margin: 0 auto 10px;
+      background: rgba(0, 0, 0, 0.3);
+      border: 2px solid #667eea;
+      border-radius: 8px;
     }
 
     /* Notifications */
@@ -361,15 +346,16 @@
       position: absolute;
       top: 20px;
       right: 20px;
-      background: rgba(0, 0, 0, 0.9);
+      background: rgba(0, 0, 0, 0.95);
       color: #00ff00;
-      padding: 15px 25px;
+      padding: 12px 20px;
       border: 2px solid #00ff00;
-      border-radius: 10px;
+      border-radius: 8px;
       font-weight: bold;
       animation: slideIn 0.3s ease-out;
       z-index: 150;
       pointer-events: none;
+      font-size: 13px;
     }
 
     @keyframes slideIn {
@@ -377,10 +363,23 @@
       to { transform: translateX(0); opacity: 1; }
     }
 
-    .completion-text {
-      color: #ffaa00;
-      font-size: 16px;
-      margin-top: 10px;
+    /* Scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: rgba(100, 100, 100, 0.2);
+      border-radius: 10px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #667eea;
+      border-radius: 10px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: #764ba2;
     }
   </style>
 </head>
@@ -389,26 +388,21 @@
     <div id="gameArea">
       <canvas id="canvas"></canvas>
       <div id="houseUI">
-        <div id="houseDisplay">
-          <div class="house-sprite" id="houseSprite">🏚️</div>
-          <div class="house-condition" id="houseCondition">Condition: 0%</div>
-        </div>
-
         <div id="taskPanel">
-          <h3>📋 Renovation Tasks</h3>
+          <h3>📋 Tasks</h3>
           <div id="tasksList"></div>
         </div>
 
         <div id="helperPanel">
-          <h3>🦸 Your Pokémon</h3>
+          <h3>🦸 Team</h3>
           <div id="helpersList"></div>
         </div>
 
         <div id="actionButtons">
-          <button class="action-btn" id="workBtn" onclick="performWork()">🔨 Work</button>
-          <button class="action-btn" id="restBtn" onclick="rest()">😴 Rest</button>
-          <button class="action-btn" id="pokeBtn" onclick="togglePokeMenu()">📖 Pokémon</button>
-          <button class="action-btn" id="pauseBtn" onclick="togglePause()">⏸️ Pause</button>
+          <button class="action-btn" onclick="game.work()">🔨 Work</button>
+          <button class="action-btn" onclick="game.rest()">😴 Rest</button>
+          <button class="action-btn" onclick="game.togglePokedex()">📖 Pokédex</button>
+          <button class="action-btn" onclick="game.togglePause()">⏸️ Pause</button>
         </div>
       </div>
     </div>
@@ -423,7 +417,7 @@
       </div>
 
       <div class="status-item">
-        <div class="status-label">PROGRESS</div>
+        <div class="status-label">HOUSE</div>
         <div class="progress-bar">
           <div class="progress-fill" id="progressBar" style="width: 0%;"></div>
         </div>
@@ -431,11 +425,19 @@
       </div>
 
       <div class="status-item">
-        <div class="status-label">WORKERS</div>
+        <div class="status-label">TEAM</div>
         <div class="progress-bar">
-          <div class="progress-fill" id="workersBar" style="width: 0%;"></div>
+          <div class="progress-fill" id="teamBar" style="width: 0%;"></div>
         </div>
-        <div class="status-value" id="workersValue">0/4</div>
+        <div class="status-value" id="teamValue">1/4</div>
+      </div>
+
+      <div class="status-item">
+        <div class="status-label">CAUGHT</div>
+        <div class="progress-bar">
+          <div class="progress-fill" id="caughtBar" style="width: 0%;"></div>
+        </div>
+        <div class="status-value" id="caughtValue">1/16</div>
       </div>
 
       <div class="status-item">
@@ -443,53 +445,75 @@
         <div class="progress-bar">
           <div class="progress-fill" id="dayBar" style="width: 0%;"></div>
         </div>
-        <div class="status-value" id="dayValue">Day 1</div>
+        <div class="status-value" id="dayValue">1</div>
       </div>
     </div>
   </div>
 
-  <!-- Starter Selection Modal -->
+  <!-- Starter Modal -->
   <div id="starterModal" class="modal active">
     <div class="modal-content">
       <h2>Choose Your Helper!</h2>
-      <p style="margin-bottom: 30px; color: #aaa;">Pick a Pokémon to help renovate the house</p>
+      <p style="margin-bottom: 25px; color: #aaa;">Pick a Pokémon to help renovate</p>
       <div class="starter-grid">
-        <div class="starter-option" onclick="selectStarter('charmander')">
-          <div class="starter-sprite">🔥</div>
-          Charmander
+        <div class="starter-option" onclick="game.selectStarter('4')">
+          <div class="starter-sprite" id="sprite-4"></div>
+          <div>Charmander</div>
         </div>
-        <div class="starter-option" onclick="selectStarter('squirtle')">
-          <div class="starter-sprite">💧</div>
-          Squirtle
+        <div class="starter-option" onclick="game.selectStarter('7')">
+          <div class="starter-sprite" id="sprite-7"></div>
+          <div>Squirtle</div>
         </div>
-        <div class="starter-option" onclick="selectStarter('bulbasaur')">
-          <div class="starter-sprite">🌿</div>
-          Bulbasaur
+        <div class="starter-option" onclick="game.selectStarter('1')">
+          <div class="starter-sprite" id="sprite-1"></div>
+          <div>Bulbasaur</div>
         </div>
-        <div class="starter-option" onclick="selectStarter('pikachu')">
-          <div class="starter-sprite">⚡</div>
-          Pikachu
+        <div class="starter-option" onclick="game.selectStarter('25')">
+          <div class="starter-sprite" id="sprite-25"></div>
+          <div>Pikachu</div>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- Pokémon Menu Modal -->
-  <div id="pokeModal" class="modal">
+  <!-- Pokedex Modal -->
+  <div id="pokedexModal" class="modal">
     <div class="modal-content">
-      <h2>📖 Pokémon Collected</h2>
-      <div id="pokeList" style="text-align: left; margin: 20px 0; max-height: 400px; overflow-y: auto;"></div>
-      <button class="modal-btn" onclick="togglePokeMenu()">Close</button>
+      <h2>📖 Pokédex</h2>
+      <div id="pokedexList" style="text-align: left; margin: 20px 0; max-height: 400px; overflow-y: auto; display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px;"></div>
+      <button class="modal-btn" onclick="game.togglePokedex()">Close</button>
     </div>
   </div>
 
-  <!-- Pause Menu Modal -->
+  <!-- Pause Modal -->
   <div id="pauseModal" class="modal">
     <div class="modal-content">
-      <h2>PAUSED</h2>
-      <button class="modal-btn" onclick="togglePause()">Resume</button>
-      <button class="modal-btn" onclick="saveGame()">Save Game</button>
-      <button class="modal-btn" onclick="mainMenu()">Main Menu</button>
+      <h2>⏸️ PAUSED</h2>
+      <button class="modal-btn" onclick="game.togglePause()">Resume</button>
+      <button class="modal-btn" onclick="game.saveGame()">Save Game</button>
+      <button class="modal-btn" onclick="game.mainMenu()">Main Menu</button>
+    </div>
+  </div>
+
+  <!-- Battle Modal -->
+  <div id="battleModal" class="modal">
+    <div class="modal-content" style="max-width: 500px;">
+      <h2 id="battleTitle">Wild Pokémon Appeared!</h2>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin: 30px 0;">
+        <div style="text-align: center;">
+          <div id="playerSpriteContainer" style="width: 120px; height: 120px; margin: 0 auto 10px; background: rgba(102, 126, 234, 0.2); border: 2px solid #667eea; border-radius: 8px;"></div>
+          <div id="playerNameBattle" style="color: #00ff00; font-weight: bold;">Your Pokémon</div>
+        </div>
+        <div style="text-align: center;">
+          <div id="enemySpriteContainer" style="width: 120px; height: 120px; margin: 0 auto 10px; background: rgba(255, 100, 100, 0.2); border: 2px solid #ff6464; border-radius: 8px;"></div>
+          <div id="enemyNameBattle" style="color: #ff6464; font-weight: bold;">Wild Pokémon</div>
+        </div>
+      </div>
+      <div style="margin: 20px 0;">
+        <button class="modal-btn" onclick="game.catchPokemon()">🔴 Catch</button>
+        <button class="modal-btn" onclick="game.battleWin()">⚡ Battle & Win</button>
+        <button class="modal-btn" onclick="game.runAway()">🏃 Run Away</button>
+      </div>
     </div>
   </div>
 
@@ -497,246 +521,475 @@
   <div id="completionModal" class="modal">
     <div class="modal-content">
       <h2>🎉 HOUSE COMPLETE!</h2>
-      <p style="color: #aaa; font-size: 18px; margin: 20px 0;">You've restored the house to glory!</p>
-      <p style="color: #ffaa00; font-size: 16px; margin: 20px 0;">
-        Now the real adventure begins... <br>
-        Pokémon are appearing around the house!
+      <p style="color: #aaa; font-size: 18px; margin: 20px 0;">You've restored the house to its former glory!</p>
+      <p style="color: #ffaa00; font-size: 14px; margin: 20px 0;">
+        Pokémon gathered: <strong id="finalCount">0</strong>/16
       </p>
-      <button class="modal-btn" onclick="startExploring()">Begin Adventure</button>
+      <button class="modal-btn" onclick="game.mainMenu()">Play Again</button>
     </div>
   </div>
 
   <script>
-    // ===== GAME STATE =====
-    const gameState = {
-      starter: null,
-      energy: 100,
-      maxEnergy: 100,
-      progress: 0,
-      maxProgress: 100,
-      day: 1,
-      pokemonTeam: [],
-      pokemonCaught: {},
-      isPaused: false,
-      gameStarted: false,
-      houseComplete: false,
-      tasks: [
-        { name: 'Clean Floors', progress: 0, maxProgress: 20, completed: false },
-        { name: 'Fix Walls', progress: 0, maxProgress: 20, completed: false },
-        { name: 'Repair Roof', progress: 0, maxProgress: 20, completed: false },
-        { name: 'Paint Interior', progress: 0, maxProgress: 20, completed: false },
-        { name: 'Restore Garden', progress: 0, maxProgress: 20, completed: false }
-      ],
-      currentTask: 0,
-      workersHired: 0
+    const POKEMON_DATA = {
+      '1': { name: 'Bulbasaur', color: '#7ec74f' },
+      '4': { name: 'Charmander', color: '#f08030' },
+      '7': { name: 'Squirtle', color: '#78c8f0' },
+      '25': { name: 'Pikachu', color: '#f8d030' },
+      '35': { name: 'Clefairy', color: '#f8aef8' },
+      '39': { name: 'Jigglypuff', color: '#f8aef8' },
+      '54': { name: 'Psyduck', color: '#f8f030' },
+      '58': { name: 'Growlithe', color: '#f08030' },
+      '63': { name: 'Abra', color: '#a890f0' },
+      '69': { name: 'Bellsprout', color: '#78c850' },
+      '74': { name: 'Geodude', color: '#c5b78c' },
+      '79': { name: 'Slowpoke', color: '#f08888' },
+      '84': { name: 'Doduo', color: '#b88860' },
+      '92': { name: 'Gastly', color: '#705898' },
+      '104': { name: 'Cubone', color: '#c5b78c' },
+      '133': { name: 'Eevee', color: '#c8a882' }
     };
 
-    const pokemonHelpers = {
-      charmander: { name: 'Charmander', emoji: '🔥', bonus: 'Fire Power' },
-      squirtle: { name: 'Squirtle', emoji: '💧', bonus: 'Water Splash' },
-      bulbasaur: { name: 'Bulbasaur', emoji: '🌿', bonus: 'Plant Growth' },
-      pikachu: { name: 'Pikachu', emoji: '⚡', bonus: 'Electric Boost' }
-    };
+    class Game {
+      constructor() {
+        this.canvas = document.getElementById('canvas');
+        this.ctx = this.canvas.getContext('2d');
+        this.resizeCanvas();
+        
+        this.state = {
+          starter: null,
+          energy: 100,
+          maxEnergy: 100,
+          progress: 0,
+          maxProgress: 100,
+          day: 1,
+          team: [],
+          caught: {},
+          isPaused: false,
+          gameStarted: false,
+          houseComplete: false,
+          currentTask: 0,
+          tasks: [
+            { name: 'Clean Floors', progress: 0, max: 20 },
+            { name: 'Fix Walls', progress: 0, max: 20 },
+            { name: 'Repair Roof', progress: 0, max: 20 },
+            { name: 'Paint Interior', progress: 0, max: 20 },
+            { name: 'Restore Garden', progress: 0, max: 20 }
+          ]
+        };
 
-    function loadGame() {
-      const saved = localStorage.getItem('pokemonHouse');
-      if (saved) {
-        const data = JSON.parse(saved);
-        Object.assign(gameState, data);
-        updateUI();
-      }
-    }
-
-    function saveGame() {
-      localStorage.setItem('pokemonHouse', JSON.stringify(gameState));
-      addNotification('✓ Game Saved!');
-    }
-
-    function selectStarter(name) {
-      gameState.starter = name;
-      gameState.pokemonTeam.push(name);
-      gameState.pokemonCaught[name] = pokemonHelpers[name];
-      document.getElementById('starterModal').classList.remove('active');
-      gameState.gameStarted = true;
-      populateHelpers();
-      updateUI();
-    }
-
-    function populateHelpers() {
-      const list = document.getElementById('helpersList');
-      list.innerHTML = '';
-      gameState.pokemonTeam.forEach((poke, idx) => {
-        const helper = pokemonHelpers[poke];
-        const slot = document.createElement('div');
-        slot.className = 'helper-slot';
-        slot.innerHTML = `
-          <div class="helper-sprite">${helper.emoji}</div>
-          <div class="helper-name">${helper.name}</div>
-          <div class="helper-bonus">+1 ${helper.bonus}</div>
-        `;
-        list.appendChild(slot);
-      });
-    }
-
-    function populateTasks() {
-      const list = document.getElementById('tasksList');
-      list.innerHTML = '';
-      gameState.tasks.forEach((task, idx) => {
-        const percent = Math.round((task.progress / task.maxProgress) * 100);
-        const slot = document.createElement('div');
-        slot.className = `task-item ${task.completed ? 'completed' : ''} ${gameState.currentTask === idx ? 'active' : ''}`;
-        slot.innerHTML = `
-          <div class="task-name">${task.name}</div>
-          <div class="task-progress">${task.progress}/${task.maxProgress} (${percent}%)</div>
-          <div class="progress-bar" style="margin-top: 5px;">
-            <div class="progress-fill" style="width: ${percent}%;"></div>
-          </div>
-        `;
-        slot.onclick = () => gameState.currentTask = idx;
-        list.appendChild(slot);
-      });
-    }
-
-    function performWork() {
-      if (!gameState.gameStarted || gameState.isPaused) return;
-      if (gameState.energy < 10) {
-        addNotification('⚠️ Too tired! Rest first.');
-        return;
+        this.spriteCache = {};
+        this.particles = [];
+        this.houseLevel = 0;
+        
+        this.loadGame();
+        this.initSpriteRendering();
+        this.animate();
+        this.setupEventListeners();
       }
 
-      gameState.energy -= 10;
-      const currentTask = gameState.tasks[gameState.currentTask];
-      const workAmount = 3 + gameState.pokemonTeam.length;
-      currentTask.progress += workAmount;
+      resizeCanvas() {
+        this.canvas.width = this.canvas.offsetWidth;
+        this.canvas.height = this.canvas.offsetHeight;
+      }
 
-      if (currentTask.progress >= currentTask.maxProgress) {
-        currentTask.progress = currentTask.maxProgress;
-        currentTask.completed = true;
-        gameState.progress += 20;
-        addNotification(`✓ ${currentTask.name} Complete!`);
+      initSpriteRendering() {
+        // Pre-generate placeholder sprites using canvas
+        this.generateSprite = (pokemonId) => {
+          const color = POKEMON_DATA[pokemonId]?.color || '#888888';
+          const canvas = document.createElement('canvas');
+          canvas.width = 80;
+          canvas.height = 80;
+          const ctx = canvas.getContext('2d');
+          
+          // Draw simple Pokémon shape
+          ctx.fillStyle = color;
+          ctx.beginPath();
+          ctx.arc(40, 30, 20, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.fillRect(25, 45, 30, 25);
+          ctx.beginPath();
+          ctx.arc(30, 45, 8, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.beginPath();
+          ctx.arc(50, 45, 8, 0, Math.PI * 2);
+          ctx.fill();
+          
+          return canvas;
+        };
+      }
 
-        if (gameState.progress >= 100) {
-          completeHouse();
+      setupEventListeners() {
+        window.addEventListener('resize', () => this.resizeCanvas());
+        window.addEventListener('keydown', (e) => {
+          if (e.key === ' ') this.work();
+          if (e.key === 'r' || e.key === 'R') this.rest();
+          if (e.key === 'Escape') this.togglePause();
+        });
+      }
+
+      selectStarter(pokemonId) {
+        this.state.starter = pokemonId;
+        this.state.team.push(pokemonId);
+        this.state.caught[pokemonId] = POKEMON_DATA[pokemonId];
+        this.state.gameStarted = true;
+        document.getElementById('starterModal').classList.remove('active');
+        this.updateUI();
+        this.loadGame(); // Auto-save
+      }
+
+      work() {
+        if (!this.state.gameStarted || this.state.isPaused || this.state.houseComplete) return;
+        if (this.state.energy < 10) {
+          this.notify('⚠️ Too tired! Rest first.');
+          return;
+        }
+
+        this.state.energy -= 10;
+        const task = this.state.tasks[this.state.currentTask];
+        const workAmount = 3 + this.state.team.length;
+        task.progress += workAmount;
+
+        // Particle effect
+        this.createParticles(this.canvas.width / 2, this.canvas.height / 2, 8);
+
+        if (task.progress >= task.max) {
+          task.progress = task.max;
+          this.state.progress += 20;
+          this.notify(`✓ ${task.name} Complete!`);
+          
+          if (this.state.progress >= 100) {
+            this.completeHouse();
+          } else {
+            this.state.currentTask = this.state.tasks.findIndex(t => t.progress < t.max);
+          }
+        }
+
+        this.updateUI();
+        this.saveGame();
+      }
+
+      rest() {
+        if (!this.state.gameStarted || this.state.isPaused || this.state.houseComplete) return;
+        this.state.energy = this.state.maxEnergy;
+        this.state.day++;
+        
+        // Random encounter
+        if (Math.random() > 0.3) {
+          this.startBattle();
         } else {
-          gameState.currentTask = gameState.tasks.findIndex(t => !t.completed);
+          this.notify('😴 Rested... New day!');
+        }
+        
+        this.updateUI();
+        this.saveGame();
+      }
+
+      startBattle() {
+        const wildPokemonIds = Object.keys(POKEMON_DATA).filter(id => id !== this.state.starter);
+        const wildId = wildPokemonIds[Math.floor(Math.random() * wildPokemonIds.length)];
+        
+        this.currentBattle = {
+          playerId: this.state.starter,
+          enemyId: wildId
+        };
+
+        document.getElementById('playerNameBattle').textContent = POKEMON_DATA[this.state.starter].name;
+        document.getElementById('enemyNameBattle').textContent = POKEMON_DATA[wildId].name;
+        
+        const playerContainer = document.getElementById('playerSpriteContainer');
+        const enemyContainer = document.getElementById('enemySpriteContainer');
+        playerContainer.innerHTML = '';
+        enemyContainer.innerHTML = '';
+        
+        const playerSprite = this.generateSprite(this.state.starter);
+        const enemySprite = this.generateSprite(wildId);
+        playerContainer.appendChild(playerSprite);
+        enemyContainer.appendChild(enemySprite);
+
+        document.getElementById('battleModal').classList.add('active');
+      }
+
+      catchPokemon() {
+        const wildId = this.currentBattle.enemyId;
+        if (!this.state.caught[wildId]) {
+          this.state.caught[wildId] = POKEMON_DATA[wildId];
+          this.notify(`✓ Caught ${POKEMON_DATA[wildId].name}!`);
+        }
+        document.getElementById('battleModal').classList.remove('active');
+        this.saveGame();
+        this.updateUI();
+      }
+
+      battleWin() {
+        const wildId = this.currentBattle.enemyId;
+        this.state.energy = Math.max(0, this.state.energy - 20);
+        
+        if (!this.state.caught[wildId]) {
+          this.state.caught[wildId] = POKEMON_DATA[wildId];
+          this.notify(`⚡ Won & Caught ${POKEMON_DATA[wildId].name}!`);
+        } else {
+          this.notify('⚡ Battle Won! (Already had this Pokémon)');
+        }
+        
+        document.getElementById('battleModal').classList.remove('active');
+        this.saveGame();
+        this.updateUI();
+      }
+
+      runAway() {
+        this.notify('🏃 Ran away safely!');
+        document.getElementById('battleModal').classList.remove('active');
+      }
+
+      completeHouse() {
+        this.state.houseComplete = true;
+        document.getElementById('finalCount').textContent = Object.keys(this.state.caught).length;
+        document.getElementById('completionModal').classList.add('active');
+        this.saveGame();
+      }
+
+      togglePause() {
+        if (!this.state.gameStarted) return;
+        this.state.isPaused = !this.state.isPaused;
+        document.getElementById('pauseModal').classList.toggle('active');
+      }
+
+      togglePokedex() {
+        const modal = document.getElementById('pokedexModal');
+        modal.classList.toggle('active');
+        
+        if (modal.classList.contains('active')) {
+          this.populatePokedex();
         }
       }
 
-      updateUI();
-    }
+      populatePokedex() {
+        const list = document.getElementById('pokedexList');
+        list.innerHTML = '';
+        
+        Object.entries(this.state.caught).forEach(([id, poke]) => {
+          const div = document.createElement('div');
+          div.style.cssText = 'padding: 12px; background: rgba(102, 126, 234, 0.2); border: 2px solid #667eea; border-radius: 8px; text-align: center;';
+          
+          const sprite = this.generateSprite(id);
+          div.appendChild(sprite);
+          
+          const label = document.createElement('div');
+          label.style.cssText = 'font-weight: bold; color: #00ff00; font-size: 12px; margin-top: 5px;';
+          label.textContent = poke.name;
+          div.appendChild(label);
+          
+          list.appendChild(div);
+        });
+      }
 
-    function rest() {
-      if (!gameState.gameStarted || gameState.isPaused) return;
-      gameState.energy = Math.min(gameState.energy + 30, gameState.maxEnergy);
-      gameState.day++;
-      addNotification('😴 Rested... New day!');
-      updateUI();
-    }
+      populateTeam() {
+        const list = document.getElementById('helpersList');
+        list.innerHTML = '';
+        
+        this.state.team.forEach(pokemonId => {
+          const poke = POKEMON_DATA[pokemonId];
+          const div = document.createElement('div');
+          div.className = 'helper-slot';
+          
+          const sprite = this.generateSprite(pokemonId);
+          div.appendChild(sprite);
+          
+          const name = document.createElement('div');
+          name.className = 'helper-name';
+          name.textContent = poke.name;
+          div.appendChild(name);
+          
+          list.appendChild(div);
+        });
+      }
 
-    function completeHouse() {
-      gameState.houseComplete = true;
-      document.getElementById('completionModal').classList.add('active');
-    }
+      populateTasks() {
+        const list = document.getElementById('tasksList');
+        list.innerHTML = '';
+        
+        this.state.tasks.forEach((task, idx) => {
+          const percent = Math.round((task.progress / task.max) * 100);
+          const div = document.createElement('div');
+          div.className = `task-item ${this.state.currentTask === idx ? 'active' : ''}`;
+          div.style.cursor = 'pointer';
+          div.onclick = () => this.state.currentTask = idx;
+          
+          div.innerHTML = `
+            <div class="task-name">${task.name}</div>
+            <div class="task-progress">${task.progress}/${task.max}</div>
+            <div class="progress-bar" style="height: 8px;">
+              <div class="progress-fill" style="width: ${percent}%;"></div>
+            </div>
+          `;
+          list.appendChild(div);
+        });
+      }
 
-    function startExploring() {
-      document.getElementById('completionModal').classList.remove('active');
-      addNotification('🗺️ Adventure mode unlocked!');
-    }
+      updateUI() {
+        // Energy
+        document.getElementById('energyValue').textContent = `${this.state.energy}/${this.state.maxEnergy}`;
+        document.getElementById('energyBar').style.width = (this.state.energy / this.state.maxEnergy) * 100 + '%';
 
-    function togglePause() {
-      if (!gameState.gameStarted) return;
-      gameState.isPaused = !gameState.isPaused;
-      document.getElementById('pauseModal').classList.toggle('active');
-    }
+        // Progress
+        document.getElementById('progressValue').textContent = `${this.state.progress}%`;
+        document.getElementById('progressBar').style.width = this.state.progress + '%';
 
-    function togglePokeMenu() {
-      document.getElementById('pokeModal').classList.toggle('active');
-      if (document.getElementById('pokeModal').classList.contains('active')) {
-        populatePokeList();
+        // Team
+        document.getElementById('teamValue').textContent = `${this.state.team.length}/4`;
+        document.getElementById('teamBar').style.width = (this.state.team.length / 4) * 100 + '%';
+
+        // Caught
+        const caughtCount = Object.keys(this.state.caught).length;
+        document.getElementById('caughtValue').textContent = `${caughtCount}/16`;
+        document.getElementById('caughtBar').style.width = (caughtCount / 16) * 100 + '%';
+
+        // Day
+        document.getElementById('dayValue').textContent = this.state.day;
+        document.getElementById('dayBar').style.width = Math.min((this.state.day / 20) * 100, 100) + '%';
+
+        // Tasks & Team
+        this.populateTasks();
+        this.populateTeam();
+
+        // Work button
+        document.getElementById('actionButtons').children[0].classList.toggle('disabled', this.state.energy < 10);
+      }
+
+      createParticles(x, y, count) {
+        for (let i = 0; i < count; i++) {
+          this.particles.push({
+            x: x,
+            y: y,
+            vx: (Math.random() - 0.5) * 8,
+            vy: (Math.random() - 0.5) * 8 - 2,
+            life: 30,
+            text: '+' + (3 + this.state.team.length)
+          });
+        }
+      }
+
+      drawParticles() {
+        this.particles = this.particles.filter(p => p.life > 0);
+        this.particles.forEach(p => {
+          p.x += p.vx;
+          p.y += p.vy;
+          p.vy += 0.2; // gravity
+          p.life--;
+
+          this.ctx.fillStyle = `rgba(102, 200, 100, ${p.life / 30})`;
+          this.ctx.font = 'bold 16px Arial';
+          this.ctx.fillText(p.text, p.x, p.y);
+        });
+      }
+
+      drawHouse() {
+        const progress = this.state.progress / 100;
+        const cx = this.canvas.width / 2;
+        const cy = this.canvas.height / 2;
+
+        // Draw house shape
+        const size = 150 + progress * 50;
+        
+        // Walls
+        this.ctx.fillStyle = `rgb(${100 + progress * 100}, ${80 + progress * 100}, ${60 + progress * 100})`;
+        this.ctx.fillRect(cx - size / 2, cy - size / 3, size, size / 2);
+
+        // Roof
+        this.ctx.fillStyle = `rgb(${150 + progress * 50}, ${100 + progress * 30}, ${80 + progress * 30})`;
+        this.ctx.beginPath();
+        this.ctx.moveTo(cx - size / 2, cy - size / 3);
+        this.ctx.lineTo(cx, cy - size / 3 - size / 3);
+        this.ctx.lineTo(cx + size / 2, cy - size / 3);
+        this.ctx.fill();
+
+        // Door
+        const doorWidth = 30 + progress * 20;
+        const doorHeight = 60 + progress * 30;
+        this.ctx.fillStyle = `rgb(${80 + progress * 80}, ${50 + progress * 70}, 30)`;
+        this.ctx.fillRect(cx - doorWidth / 2, cy, doorWidth, doorHeight);
+
+        // Windows
+        const windowSize = 20 + progress * 15;
+        this.ctx.fillStyle = `rgb(${150 + progress * 100}, ${200 + progress * 50}, 255)`;
+        this.ctx.fillRect(cx - size / 3 - windowSize / 2, cy - size / 6, windowSize, windowSize);
+        this.ctx.fillRect(cx + size / 3 - windowSize / 2, cy - size / 6, windowSize, windowSize);
+
+        // Progress text
+        this.ctx.fillStyle = '#ffaa00';
+        this.ctx.font = 'bold 24px Arial';
+        this.ctx.textAlign = 'center';
+        this.ctx.fillText(`${this.state.progress}%`, cx, cy + size / 2 + 40);
+      }
+
+      animate() {
+        this.ctx.fillStyle = 'rgba(135, 206, 235, 0.5)';
+        this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+
+        if (this.state.gameStarted && !this.state.isPaused) {
+          this.drawHouse();
+          this.drawParticles();
+        }
+
+        requestAnimationFrame(() => this.animate());
+      }
+
+      saveGame() {
+        localStorage.setItem('pokemonHouseGame', JSON.stringify(this.state));
+      }
+
+      loadGame() {
+        const saved = localStorage.getItem('pokemonHouseGame');
+        if (saved) {
+          this.state = JSON.parse(saved);
+          if (this.state.gameStarted) {
+            document.getElementById('starterModal').classList.remove('active');
+            this.updateUI();
+          }
+        }
+      }
+
+      mainMenu() {
+        this.state = {
+          starter: null,
+          energy: 100,
+          maxEnergy: 100,
+          progress: 0,
+          maxProgress: 100,
+          day: 1,
+          team: [],
+          caught: {},
+          isPaused: false,
+          gameStarted: false,
+          houseComplete: false,
+          currentTask: 0,
+          tasks: [
+            { name: 'Clean Floors', progress: 0, max: 20 },
+            { name: 'Fix Walls', progress: 0, max: 20 },
+            { name: 'Repair Roof', progress: 0, max: 20 },
+            { name: 'Paint Interior', progress: 0, max: 20 },
+            { name: 'Restore Garden', progress: 0, max: 20 }
+          ]
+        };
+        document.getElementById('starterModal').classList.add('active');
+        document.getElementById('completionModal').classList.remove('active');
+        document.getElementById('pauseModal').classList.remove('active');
+        this.saveGame();
+      }
+
+      notify(text) {
+        const notif = document.createElement('div');
+        notif.className = 'notification';
+        notif.textContent = text;
+        document.body.appendChild(notif);
+        setTimeout(() => notif.remove(), 3000);
       }
     }
 
-    function populatePokeList() {
-      const list = document.getElementById('pokeList');
-      list.innerHTML = '';
-      Object.entries(gameState.pokemonCaught).forEach(([key, poke]) => {
-        const item = document.createElement('div');
-        item.style.cssText = 'padding: 10px; margin: 10px 0; background: rgba(102, 126, 234, 0.2); border-radius: 8px; border-left: 3px solid #667eea;';
-        item.innerHTML = `
-          <div style="font-size: 24px; margin-bottom: 5px;">${poke.emoji}</div>
-          <div style="font-weight: bold; color: #00ff00;">${poke.name}</div>
-          <div style="font-size: 12px; color: #aaa;">Bonus: ${poke.bonus}</div>
-        `;
-        list.appendChild(item);
-      });
-    }
+    const game = new Game();
 
-    function mainMenu() {
-      gameState.gameStarted = false;
-      gameState.isPaused = false;
-      document.getElementById('pauseModal').classList.remove('active');
-      document.getElementById('starterModal').classList.add('active');
-      gameState.energy = 100;
-      gameState.progress = 0;
-      gameState.day = 1;
-      gameState.tasks.forEach(t => { t.progress = 0; t.completed = false; });
-      gameState.currentTask = 0;
-      gameState.pokemonTeam = [];
-      gameState.pokemonCaught = {};
-      updateUI();
-    }
-
-    function addNotification(text) {
-      const notif = document.createElement('div');
-      notif.className = 'notification';
-      notif.textContent = text;
-      document.body.appendChild(notif);
-      setTimeout(() => notif.remove(), 3000);
-    }
-
-    function updateUI() {
-      // Energy
-      document.getElementById('energyValue').textContent = `${gameState.energy}/${gameState.maxEnergy}`;
-      document.getElementById('energyBar').style.width = (gameState.energy / gameState.maxEnergy) * 100 + '%';
-
-      // Progress
-      document.getElementById('progressValue').textContent = `${gameState.progress}%`;
-      document.getElementById('progressBar').style.width = gameState.progress + '%';
-
-      // House Condition
-      const houseEmoji = gameState.progress >= 100 ? '🏡' : gameState.progress >= 75 ? '🏘️' : gameState.progress >= 50 ? '🏗️' : gameState.progress >= 25 ? '🏚️' : '🏚️';
-      document.getElementById('houseSprite').textContent = houseEmoji;
-      document.getElementById('houseCondition').textContent = `Condition: ${gameState.progress}%`;
-
-      // Day
-      document.getElementById('dayValue').textContent = `Day ${gameState.day}`;
-      document.getElementById('dayBar').style.width = Math.min((gameState.day / 10) * 100, 100) + '%';
-
-      // Workers
-      document.getElementById('workersValue').textContent = `${gameState.pokemonTeam.length}/4`;
-      document.getElementById('workersBar').style.width = (gameState.pokemonTeam.length / 4) * 100 + '%';
-
-      // Tasks
-      populateTasks();
-
-      // Work button state
-      document.getElementById('workBtn').classList.toggle('disabled', gameState.energy < 10);
-    }
-
-    window.addEventListener('keydown', (e) => {
-      if (e.key === ' ') performWork();
-      if (e.key === 'r') rest();
-      if (e.key === 'Escape') togglePause();
-    });
-
-    window.addEventListener('load', () => {
-      loadGame();
-      if (gameState.gameStarted) {
-        document.getElementById('starterModal').classList.remove('active');
-        populateHelpers();
-      }
-      updateUI();
-    });
+    // Expose global functions for onclick handlers
+    window.game = game;
   </script>
 </body>
 </html>
